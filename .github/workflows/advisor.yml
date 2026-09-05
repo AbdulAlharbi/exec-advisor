@@ -26,6 +26,12 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[claude]"
+      - name: Restore the audit chain
+        # out/ is gitignored, so the runner starts empty and AuditLog would begin a fresh
+        # chain from GENESIS. Seed it from the published copy to keep one continuous chain.
+        run: |
+          mkdir -p out
+          [ -f docs/data/audit.jsonl ] && cp docs/data/audit.jsonl out/audit.jsonl || true
       - name: Run the advisor
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # optional; without it the rule brain runs
@@ -35,10 +41,12 @@ jobs:
                       --sources "${{ github.event.inputs.sources || 'data/company/sources.yaml' }}" \
                       --out out --site docs --no-show
           advisor audit --out out | tail -1
+      - name: Publish the audit trail
+        run: cp out/audit.jsonl docs/data/audit.jsonl
       - name: Commit the brief
         run: |
           git config user.name "advisor-bot"
           git config user.email "advisor-bot@users.noreply.github.com"
-          git add docs/data out/audit.jsonl out/runs out/reports
+          git add docs/data
           git diff --cached --quiet || git commit -m "advisor: $(date -u +%Y-%m-%dT%H:%MZ) brief"
           git push
