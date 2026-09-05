@@ -1,0 +1,25 @@
+# Meridian Freight Systems — a fictional Series B logistics SaaS used as the demo company.
+context: >
+  Meridian Freight Systems: Series B logistics SaaS, ~$31M ARR, planning to raise a Series C in
+  October. The board cares about the fundraise story, customer concentration, and whether the
+  enterprise pivot is real.
+sources:
+  - id: q2-financials
+    title: Q2 financial summary
+    path: q2-financials.md
+  - id: pipeline
+    title: Sales pipeline notes (CRO weekly)
+    path: pipeline-notes.md
+  - id: incidents
+    title: Operations incident log
+    path: incident-log.md
+  - id: ceo-memo
+    title: CEO memo to board, Aug 28
+    path: ceo-memo.md
+  - id: customer-voice
+    title: Customer feedback digest (support + NPS, August)
+    path: customer-feedback.md
+  # A live source is re-fetched on every run. Example — a Google Sheet published as CSV:
+  # - id: pipeline-sheet
+  #   title: Live pipeline (published sheet)
+  #   url: https://docs.google.com/spreadsheets/d/e/XXXX/pub?output=csv
