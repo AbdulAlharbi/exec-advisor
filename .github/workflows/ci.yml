@@ -1,0 +1,23 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+      - name: Full pipeline on the rule brain (no key)
+        run: |
+          advisor run --brain heuristic --out /tmp/ci --site /tmp/ci/site --no-show
+          advisor run --brain heuristic --sources data/company-week2/sources.yaml --out /tmp/ci --site /tmp/ci/site --no-show
+          advisor audit --out /tmp/ci | tail -1
