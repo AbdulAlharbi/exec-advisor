@@ -1,0 +1,891 @@
+{
+ "run_id": "RUN-A3F76F01",
+ "at": "2026-09-05T09:49:35.822115Z",
+ "brain": "heuristic",
+ "model": "",
+ "previous_run_id": null,
+ "context": "Meridian Freight Systems: Series B logistics SaaS, ~$31M ARR, planning to raise a Series C in October. The board cares about the fundraise story, customer concentration, and whether the enterprise pivot is real.",
+ "headline": "Cash runway is roughly 8 months at current burn. 3 critical and 7 high risks are live; 3 opportunities.",
+ "summary": "Revenue is growing (18% on the period), but gross margin, nps, deferred revenue, burn, dso, concentration all moved the wrong way in the same period. The advisor's reading: the growth story is masking a concentration and reliability problem that could unwind quickly. 8 assumptions in the leadership narrative do not survive the evidence.",
+ "posture": "alarm",
+ "health_score": 11,
+ "risks": [
+  {
+   "id": "R-3DCA13C2",
+   "kind": "risk",
+   "key": "runway",
+   "title": "Cash runway is roughly 8 months at current burn",
+   "level": "critical",
+   "likelihood": "likely",
+   "horizon": "next 6-9 months",
+   "evidence": [
+    "C-2747674E"
+   ],
+   "rationale": "Cash $14.6M against burn $1.9M per month gives about 7.7 months \u2014 under the 12-month floor most boards require before a raise.",
+   "action": "Rebuild the cash forecast on current burn with no unsigned expansion revenue, and set a burn ceiling",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-3858E19D",
+   "kind": "risk",
+   "key": "concentration",
+   "title": "Top customer is 34% of ARR",
+   "level": "critical",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-4E9CA414",
+    "C-701AD6CF"
+   ],
+   "rationale": "Single-customer share is 34%, up from 19%. Losing or renegotiating that account moves the whole plan. The same customer holds a contractual exit right.",
+   "action": "Cap the single-customer share of ARR in the plan and put a second-account expansion programme behind it",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-FA3E6863",
+   "kind": "risk",
+   "key": "reliability",
+   "title": "Repeated outages on the core subsystem have triggered a customer's termination right",
+   "level": "critical",
+   "likelihood": "likely",
+   "horizon": "now",
+   "evidence": [
+    "C-28E75158",
+    "C-B59A9F11",
+    "C-2613CB9A",
+    "C-701AD6CF"
+   ],
+   "rationale": "3 incidents recorded on the same subsystem; SLA credits of $212k. The third breach in a rolling window activates termination for convenience.",
+   "action": "Freeze feature work on the affected subsystem, fill the open platform reqs, and put a change-management gate on production migrations",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-DF5B7255",
+   "kind": "risk",
+   "key": "renewal",
+   "title": "A key renewal is being forecast on a relationship that no longer exists",
+   "level": "high",
+   "likelihood": "likely",
+   "horizon": "before the renewal date",
+   "evidence": [
+    "C-EED32EC2"
+   ],
+   "rationale": "The champion has left and the replacement is not engaging, yet the deal is still forecast at a high probability.",
+   "action": "Get an executive sponsor in front of the new decision-maker at the at-risk account before the renewal date",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-2014BA28",
+   "kind": "risk",
+   "key": "sales_attrition",
+   "title": "Top-quartile sales reps are leaving",
+   "level": "high",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-417BABE8"
+   ],
+   "rationale": "Regretted attrition in the sales team, with a comp-plan change named as the cause.",
+   "action": "Review the comp plan change with the remaining top-quartile reps and correct it before more leave",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-1FE84DD2",
+   "kind": "risk",
+   "key": "nps",
+   "title": "Customer sentiment falling: NPS 31 from 47",
+   "level": "high",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-7AF3B065",
+    "C-AC88ED5A",
+    "C-5FBD0256"
+   ],
+   "rationale": "A 16-point NPS drop in one period, with detractors citing reliability and a perceived shift of focus to one customer.",
+   "action": "Run a detractor call programme with the enterprise segment and publish a reliability commitment",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-472FC970",
+   "kind": "risk",
+   "key": "margin",
+   "title": "Gross margin fell 5 points",
+   "level": "high",
+   "likelihood": "possible",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-07C0CFFF"
+   ],
+   "rationale": "Margin moved from 66% to 61%. If onboarding cost is structural rather than one-off, the enterprise model is less profitable than presented.",
+   "action": "Separate one-off onboarding cost from structural margin and decide which it is",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-23D5CEAC",
+   "kind": "risk",
+   "key": "burn",
+   "title": "Burn rate up 46% quarter on quarter",
+   "level": "high",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-2747674E",
+    "C-1131A92E"
+   ],
+   "rationale": "Monthly burn rose from $1.3M to $1.9M, ahead of any signed expansion revenue.",
+   "action": "Tie further hiring to signed, not verbal, revenue",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-C1CC526A",
+   "kind": "risk",
+   "key": "smb_churn",
+   "title": "SMB customers are asking how to leave",
+   "level": "high",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-790B384A",
+    "C-AC88ED5A",
+    "C-5FBD0256"
+   ],
+   "rationale": "Annual-plan customers asking about early termination is a leading churn indicator, coinciding with a deliberate deprioritisation of that segment.",
+   "action": "Call every SMB account that asked about leaving, and reverse the SMB feature freeze until the enterprise expansion is signed",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-CA9F14AD",
+   "kind": "risk",
+   "key": "key_person",
+   "title": "The platform team is a single point of failure",
+   "level": "high",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-2613CB9A",
+    "C-12D50C8D"
+   ],
+   "rationale": "One engineer has carried every incident and has flagged burnout; open platform reqs have gone unfilled for months.",
+   "action": "Rotate on-call this week and backfill the platform team before anything else",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-D6B1B9BF",
+   "kind": "risk",
+   "key": "dso",
+   "title": "Collections slowing: DSO 71 days from 48",
+   "level": "medium",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-BF93D2E9",
+    "C-7EA5E49E"
+   ],
+   "rationale": "Cash is arriving later while burn is rising; combined with renewals moving to monthly billing this compounds the runway problem.",
+   "action": "Move the accounts that switched to monthly billing back to annual prepay at renewal, with a discount if needed",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-47C76EB8",
+   "kind": "risk",
+   "key": "competitor",
+   "title": "A competitor is targeting the installed base with a free migration tool",
+   "level": "medium",
+   "likelihood": "possible",
+   "horizon": "6 months",
+   "evidence": [
+    "C-0EFF9294"
+   ],
+   "rationale": "Customers are raising the competitor unprompted on calls.",
+   "action": "Build a retention offer for the mid-market base the competitor is targeting",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "R-E1C06F52",
+   "kind": "risk",
+   "key": "headcount",
+   "title": "Headcount grew 20% while revenue grew 18%",
+   "level": "medium",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-1131A92E",
+    "C-222D31D6"
+   ],
+   "rationale": "Cost is scaling faster than revenue; the productivity story has to be shown, not assumed.",
+   "action": "Pause non-critical hiring until revenue growth exceeds headcount growth",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  }
+ ],
+ "opportunities": [
+  {
+   "id": "O-B7CEF88F",
+   "kind": "opportunity",
+   "key": "leads",
+   "title": "Inbound demand is rising; conversion is the fixable bottleneck",
+   "level": "high",
+   "likelihood": "likely",
+   "horizon": "30 days",
+   "evidence": [
+    "C-D95BB580"
+   ],
+   "rationale": "Lead volume is up sharply while conversion fell from 11% to 6%. Recovering conversion on the higher volume is cheaper growth than any new channel.",
+   "action": "A/B test the pricing page change against the previous version and fix conversion before blaming lead quality",
+   "status": "kept",
+   "objections": [
+    "contrarian (sustain): Evidence is consistent across sources."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "O-5919A1AE",
+   "kind": "opportunity",
+   "key": "expansion",
+   "title": "A large expansion is on the table",
+   "level": "high",
+   "likelihood": "possible",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-24911596",
+    "C-5DD6E3A6",
+    "C-8731EF6B"
+   ],
+   "rationale": "An expansion of this size would materially lift ARR \u2014 if it closes.",
+   "action": "Get the expansion order form signed before any plan depends on it",
+   "status": "weakened",
+   "objections": [
+    "contrarian (weaken): The expansion is a verbal commitment described as 'just paperwork'; nothing is signed and the plan already depends on it."
+   ],
+   "proposed_by": "heuristic"
+  },
+  {
+   "id": "O-45A46982",
+   "kind": "opportunity",
+   "key": "core_value",
+   "title": "Customers can quantify the savings the product delivers",
+   "level": "medium",
+   "likelihood": "likely",
+   "horizon": "this quarter",
+   "evidence": [
+    "C-947C305C"
+   ],
+   "rationale": "Promoters cite hard savings and a strong onboarding team \u2014 the retention message is already written by customers.",
+   "action": "Turn the quantified savings customers report into a retention and renewal message",
+   "status": "weakened",
+   "objections": [
+    "contrarian (weaken): Rests on a single qualitative line of evidence; no number behind it yet."
+   ],
+   "proposed_by": "heuristic"
+  }
+ ],
+ "assumptions": [
+  {
+   "id": "A-5BC761E5",
+   "statement": "Runway is comfortably above 12 months",
+   "quote_claim": "C-2747674E",
+   "why_questionable": "On the numbers in the same document, $14.6M of cash at $1.9M per month is about 7.7 months \u2014 not 'comfortably above 12'.",
+   "test": "Rebuild the cash forecast on current burn with unsigned expansion excluded; compare to the board deck figure."
+  },
+  {
+   "id": "A-EC18514C",
+   "statement": "The reliability problems are growing pains that the platform team has under control",
+   "quote_claim": "C-0DFC67CD",
+   "why_questionable": "3 incidents on the same subsystem, one engineer on call for all of them flagging burnout, and open reqs unfilled for months is not 'under control'; it is a team at capacity.",
+   "test": "Ask for the incident trend by week and the on-call roster for the last 90 days."
+  },
+  {
+   "id": "A-006AE5B9",
+   "statement": "The expansion will close this quarter because procurement is 'just paperwork'",
+   "quote_claim": "C-24911596",
+   "why_questionable": "A verbal yes from an operations VP is not a signature, and the same customer has just escalated a third SLA breach to the CEO and holds a termination right.",
+   "test": "Ask procurement for the signed order form date; until then move the deal out of Commit."
+  },
+  {
+   "id": "A-04FA81FB",
+   "statement": "The at-risk renewal is still a 90% probability",
+   "quote_claim": "C-24911596",
+   "why_questionable": "The champion left in July and the new decision-maker is not returning calls; a 90% forecast is inertia, not evidence.",
+   "test": "Re-forecast at 50% until the new VP takes a meeting; get an executive sponsor to request one this week."
+  },
+  {
+   "id": "A-E4FDC1B8",
+   "statement": "Enterprise customer-success hiring will be paid back by expansion revenue",
+   "quote_claim": "C-5DD6E3A6",
+   "why_questionable": "The expansion is unsigned and concentration is already 34%; the cost is certain and the revenue is not.",
+   "test": "Model CS cost against signed expansion only and show the payback period."
+  },
+  {
+   "id": "A-79777FB4",
+   "statement": "Engineering headcount can wait until after the raise",
+   "quote_claim": "C-0DFC67CD",
+   "why_questionable": "The reliability incidents are the thing most likely to derail the raise; deferring the fix until after it is circular.",
+   "test": "Cost two platform hires against one more SLA breach with the top customer."
+  },
+  {
+   "id": "A-A5351ED7",
+   "statement": "Q2 was the best quarter ever",
+   "quote_claim": "C-AC88ED5A",
+   "why_questionable": "Revenue grew, but margin, burn, DSO, deferred revenue and NPS all moved the wrong way in the same quarter. Best by one metric, worst by five.",
+   "test": "Put the six metrics side by side on one slide and ask the board which quarter it prefers."
+  },
+  {
+   "id": "A-2C81543D",
+   "statement": "Inbound conversion fell because the leads are lower quality",
+   "quote_claim": "C-D95BB580",
+   "why_questionable": "Conversion halved immediately after a pricing page change; lead quality is the explanation that requires no one to have made a mistake.",
+   "test": "Restore the previous pricing page for half the traffic for two weeks and compare conversion."
+  }
+ ],
+ "recommendations": [
+  {
+   "action": "Rebuild the cash forecast on current burn with no unsigned expansion revenue, and set a burn ceiling",
+   "rationale": "Cash $14.6M against burn $1.9M per month gives about 7.7 months \u2014 under the 12-month floor most boards require before a raise.",
+   "owner": "CFO",
+   "timeline": "Before the next board meeting",
+   "expected_outcome": "A runway number the board can defend, and a trigger for a cost plan if it drops under 12 months",
+   "linked": [
+    "R-3DCA13C2"
+   ]
+  },
+  {
+   "action": "Cap the single-customer share of ARR in the plan and put a second-account expansion programme behind it",
+   "rationale": "Single-customer share is 34%, up from 19%. Losing or renegotiating that account moves the whole plan. The same customer holds a contractual exit right.",
+   "owner": "CRO with CFO",
+   "timeline": "This quarter",
+   "expected_outcome": "A written plan that keeps the top customer under 25% of ARR by year end",
+   "linked": [
+    "R-3858E19D"
+   ]
+  },
+  {
+   "action": "Freeze feature work on the affected subsystem, fill the open platform reqs, and put a change-management gate on production migrations",
+   "rationale": "3 incidents recorded on the same subsystem; SLA credits of $212k. The third breach in a rolling window activates termination for convenience.",
+   "owner": "CTO",
+   "timeline": "Start this week; reqs filled within 60 days",
+   "expected_outcome": "Zero SLA breaches in the next 90-day window; on-call rotated across at least four engineers",
+   "linked": [
+    "R-FA3E6863"
+   ]
+  },
+  {
+   "action": "Get an executive sponsor in front of the new decision-maker at the at-risk account before the renewal date",
+   "rationale": "The champion has left and the replacement is not engaging, yet the deal is still forecast at a high probability.",
+   "owner": "CEO with CRO",
+   "timeline": "Within two weeks",
+   "expected_outcome": "A confirmed meeting and a re-forecast of the renewal based on what is heard",
+   "linked": [
+    "R-DF5B7255"
+   ]
+  },
+  {
+   "action": "Review the comp plan change with the remaining top-quartile reps and correct it before more leave",
+   "rationale": "Regretted attrition in the sales team, with a comp-plan change named as the cause.",
+   "owner": "CRO",
+   "timeline": "Two weeks",
+   "expected_outcome": "No further regretted attrition this quarter",
+   "linked": [
+    "R-2014BA28"
+   ]
+  },
+  {
+   "action": "Run a detractor call programme with the enterprise segment and publish a reliability commitment",
+   "rationale": "A 16-point NPS drop in one period, with detractors citing reliability and a perceived shift of focus to one customer.",
+   "owner": "VP Customer Success",
+   "timeline": "30 days",
+   "expected_outcome": "Enterprise NPS back above 25 at the next survey",
+   "linked": [
+    "R-1FE84DD2"
+   ]
+  }
+ ],
+ "questions": [
+  "Rebuild the cash forecast on current burn with unsigned expansion excluded; compare to the board deck figure.",
+  "Ask for the incident trend by week and the on-call roster for the last 90 days.",
+  "Ask procurement for the signed order form date; until then move the deal out of Commit.",
+  "Re-forecast at 50% until the new VP takes a meeting; get an executive sponsor to request one this week.",
+  "Model CS cost against signed expansion only and show the payback period.",
+  "What is net revenue retention by segment, and what was it last quarter?"
+ ],
+ "gaps": [
+  "Gross and net revenue retention by segment \u2014 the brief cannot tell whether growth is new logos or expansion",
+  "Pipeline coverage and stage-weighted forecast, not verbal commitments",
+  "A 12-month cash forecast that separates signed from unsigned revenue"
+ ],
+ "changes": [],
+ "grounding": {
+  "claims_extracted": 30,
+  "claims_verified": 30,
+  "claims_dropped": 0,
+  "findings_proposed": 16,
+  "findings_dropped": 0,
+  "findings_weakened": 2,
+  "dropped_examples": []
+ },
+ "sources": [
+  {
+   "id": "q2-financials",
+   "title": "Q2 financial summary",
+   "kind": "file",
+   "chars": 715,
+   "fetched_at": "2026-09-05T09:49:35.822420Z",
+   "error": null
+  },
+  {
+   "id": "pipeline",
+   "title": "Sales pipeline notes (CRO weekly)",
+   "kind": "file",
+   "chars": 856,
+   "fetched_at": "2026-09-05T09:49:35.822465Z",
+   "error": null
+  },
+  {
+   "id": "incidents",
+   "title": "Operations incident log",
+   "kind": "file",
+   "chars": 800,
+   "fetched_at": "2026-09-05T09:49:35.822493Z",
+   "error": null
+  },
+  {
+   "id": "ceo-memo",
+   "title": "CEO memo to board, Aug 28",
+   "kind": "file",
+   "chars": 709,
+   "fetched_at": "2026-09-05T09:49:35.822519Z",
+   "error": null
+  },
+  {
+   "id": "customer-voice",
+   "title": "Customer feedback digest (support + NPS, August)",
+   "kind": "file",
+   "chars": 549,
+   "fetched_at": "2026-09-05T09:49:35.822542Z",
+   "error": null
+  }
+ ],
+ "claims": [
+  {
+   "id": "C-5E9B9CFD",
+   "source_id": "q2-financials",
+   "quote": "Meridian Freight Systems \u2014 Q2 2026 close (unaudited)",
+   "statement": "Meridian Freight Systems \u2014 Q2 2026 close (unaudited)",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-222D31D6",
+   "source_id": "q2-financials",
+   "quote": "Revenue: $8.4M (Q1: $7.1M, +18% QoQ). ARR now $31.2M.",
+   "statement": "Revenue: $8.4M (Q1: $7.1M, +18% QoQ). ARR now $31.2M.",
+   "metric": "arr",
+   "value": 31.2,
+   "prior": null,
+   "unit": "M",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-07C0CFFF",
+   "source_id": "q2-financials",
+   "quote": "Gross margin: 61% (Q1: 66%). Margin drop attributed to Kestrel Retail onboarding costs and the new data-centre contract.",
+   "statement": "Gross margin: 61% (Q1: 66%). Margin drop attributed to Kestrel Retail onboarding costs and the new data-centre contract.",
+   "metric": "gross_margin",
+   "value": 61.0,
+   "prior": 66.0,
+   "unit": "%",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-2747674E",
+   "source_id": "q2-financials",
+   "quote": "Net burn: $1.9M/month (Q1: $1.3M). Cash on hand: $14.6M. Board deck says runway is \"comfortably above 12 months\".",
+   "statement": "Net burn: $1.9M/month (Q1: $1.3M). Cash on hand: $14.6M. Board deck says runway is \"comfortably above 12 months\".",
+   "metric": "burn",
+   "value": 1.9,
+   "prior": 1.3,
+   "unit": "M",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-4E9CA414",
+   "source_id": "q2-financials",
+   "quote": "Top customer concentration: Kestrel Retail = 34% of ARR (was 19% in Q4). Next largest: Harlow Foods 9%, Dunmore Logistics 7%.",
+   "statement": "Top customer concentration: Kestrel Retail = 34% of ARR (was 19% in Q4). Next largest: Harlow Foods 9%, Dunmore Logistics 7%.",
+   "metric": "concentration",
+   "value": 34.0,
+   "prior": 19.0,
+   "unit": "%",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-1131A92E",
+   "source_id": "q2-financials",
+   "quote": "Headcount: 142 (Q1: 118). 19 of the 24 new hires are in customer success and implementation.",
+   "statement": "Headcount: 142 (Q1: 118). 19 of the 24 new hires are in customer success and implementation.",
+   "metric": "headcount",
+   "value": 142.0,
+   "prior": 118.0,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-7EA5E49E",
+   "source_id": "q2-financials",
+   "quote": "Deferred revenue: $4.1M, down from $5.3M. Finance note: several enterprise renewals moved to monthly billing at customer request.",
+   "statement": "Deferred revenue: $4.1M, down from $5.3M. Finance note: several enterprise renewals moved to monthly billing at customer request.",
+   "metric": "deferred_revenue",
+   "value": 4.1,
+   "prior": 5.3,
+   "unit": "M",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-BF93D2E9",
+   "source_id": "q2-financials",
+   "quote": "DSO: 71 days (Q1: 48).",
+   "statement": "DSO: 71 days (Q1: 48).",
+   "metric": "dso",
+   "value": 71.0,
+   "prior": 48.0,
+   "unit": "days",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-82BE92A2",
+   "source_id": "pipeline",
+   "quote": "Week of Aug 31.",
+   "statement": "Week of Aug 31.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-24911596",
+   "source_id": "pipeline",
+   "quote": "Kestrel Retail expansion (adds 3 regions, +$3.6M ARR): verbal yes from VP Ops. Procurement is \"just paperwork\". Forecast as Commit for Q3 close. Everything in the Q3 plan depends on this landing.",
+   "statement": "Kestrel Retail expansion (adds 3 regions, +$3.6M ARR): verbal yes from VP Ops. Procurement is \"just paperwork\". Forecast as Commit for Q3 close. Everything in the Q3 plan depends on this landing.",
+   "metric": "arr",
+   "value": 3.0,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-EED32EC2",
+   "source_id": "pipeline",
+   "quote": "Harlow Foods renewal (Sept 30): champion left the company in July. New VP Supply Chain has not returned two calls. Still forecast at 90%.",
+   "statement": "Harlow Foods renewal (Sept 30): champion left the company in July. New VP Supply Chain has not returned two calls. Still forecast at 90%.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-972D133F",
+   "source_id": "pipeline",
+   "quote": "Northgate Pharma new logo ($1.1M): moved to Q4, budget freeze until the new CFO is in seat.",
+   "statement": "Northgate Pharma new logo ($1.1M): moved to Q4, budget freeze until the new CFO is in seat.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-D95BB580",
+   "source_id": "pipeline",
+   "quote": "Inbound SMB leads up 40% since the pricing page change; conversion down from 11% to 6%. Reps say the leads are lower quality.",
+   "statement": "Inbound SMB leads up 40% since the pricing page change; conversion down from 11% to 6%. Reps say the leads are lower quality.",
+   "metric": "lead_conversion",
+   "value": 6.0,
+   "prior": 11.0,
+   "unit": "%",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-417BABE8",
+   "source_id": "pipeline",
+   "quote": "Two AEs resigned in August (both top-quartile). Exit interview theme: comp plan changes, quota raised 35% with no territory change.",
+   "statement": "Two AEs resigned in August (both top-quartile). Exit interview theme: comp plan changes, quota raised 35% with no territory change.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-0EFF9294",
+   "source_id": "pipeline",
+   "quote": "Competitive: Lattice Logistics is now offering a free migration tool aimed at our mid-market base. Three customers have mentioned it on calls.",
+   "statement": "Competitive: Lattice Logistics is now offering a free migration tool aimed at our mid-market base. Three customers have mentioned it on calls.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-28E75158",
+   "source_id": "incidents",
+   "quote": "Aug 3 \u2014 Routing engine outage, 4h11m, 61 customers affected. Root cause: schema migration run against production during business hours. Kestrel escalated to our CEO.",
+   "statement": "Aug 3 \u2014 Routing engine outage, 4h11m, 61 customers affected. Root cause: schema migration run against production during business hours. Kestrel escalated to our CEO.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-B59A9F11",
+   "source_id": "incidents",
+   "quote": "Aug 12 \u2014 Latency degradation 90 min. Same subsystem. Postmortem: insufficient load testing before the Kestrel volume ramp.",
+   "statement": "Aug 12 \u2014 Latency degradation 90 min. Same subsystem. Postmortem: insufficient load testing before the Kestrel volume ramp.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-E65CDA3D",
+   "source_id": "incidents",
+   "quote": "Aug 19 \u2014 Data export job silently failed for 9 days before a customer (Harlow Foods) noticed. No internal alert existed.",
+   "statement": "Aug 19 \u2014 Data export job silently failed for 9 days before a customer (Harlow Foods) noticed. No internal alert existed.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-2613CB9A",
+   "source_id": "incidents",
+   "quote": "Aug 27 \u2014 Third outage on the routing engine, 2h. The on-call engineer was the same person for all three incidents; he has flagged burnout to his manager.",
+   "statement": "Aug 27 \u2014 Third outage on the routing engine, 2h. The on-call engineer was the same person for all three incidents; he has flagged burnout to his manager.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-701AD6CF",
+   "source_id": "incidents",
+   "quote": "SLA credits issued in August: $212k. The Kestrel contract has a termination-for-convenience clause triggered by 3 SLA breaches in any rolling 90 days. This was the third.",
+   "statement": "SLA credits issued in August: $212k. The Kestrel contract has a termination-for-convenience clause triggered by 3 SLA breaches in any rolling 90 days. This was the third.",
+   "metric": "sla_credits",
+   "value": 0.212,
+   "prior": null,
+   "unit": "M",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-12D50C8D",
+   "source_id": "incidents",
+   "quote": "Platform team headcount: 6. Two open reqs unfilled for 5 months.",
+   "statement": "Platform team headcount: 6. Two open reqs unfilled for 5 months.",
+   "metric": "headcount",
+   "value": 6.0,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-AC88ED5A",
+   "source_id": "ceo-memo",
+   "quote": "Q2 was our best quarter ever and the Kestrel relationship is the model for how we go upmarket. We are leaning fully into enterprise: I have asked the team to deprioritise SMB feature work for the rest of the year.",
+   "statement": "Q2 was our best quarter ever and the Kestrel relationship is the model for how we go upmarket. We are leaning fully into enterprise: I have asked the team to deprioritise SMB feature work for the rest of the year.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-5DD6E3A6",
+   "source_id": "ceo-memo",
+   "quote": "Hiring in CS was the right call; enterprise customers need white-glove service and we will make it up in expansion revenue.",
+   "statement": "Hiring in CS was the right call; enterprise customers need white-glove service and we will make it up in expansion revenue.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-0DFC67CD",
+   "source_id": "ceo-memo",
+   "quote": "The reliability blips in August are growing pains; the platform team has it under control and I do not think we need to add engineering headcount before the Series C.",
+   "statement": "The reliability blips in August are growing pains; the platform team has it under control and I do not think we need to add engineering headcount before the Series C.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-8731EF6B",
+   "source_id": "ceo-memo",
+   "quote": "We plan to open the Series C process in October at a $400M+ valuation on the strength of the Kestrel expansion and the $35M+ ARR we will exit Q3 with.",
+   "statement": "We plan to open the Series C process in October at a $400M+ valuation on the strength of the Kestrel expansion and the $35M+ ARR we will exit Q3 with.",
+   "metric": "arr",
+   "value": 3.0,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-7AF3B065",
+   "source_id": "customer-voice",
+   "quote": "NPS: 31 (May: 47). Enterprise segment NPS: 12. SMB segment NPS: 44.",
+   "statement": "NPS: 31 (May: 47). Enterprise segment NPS: 12. SMB segment NPS: 44.",
+   "metric": "nps",
+   "value": 31.0,
+   "prior": 47.0,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-5FBD0256",
+   "source_id": "customer-voice",
+   "quote": "Recurring themes in detractor comments: outages during peak hours, slow to get answers on anything technical, and it feels like the product is being built for one big customer now.",
+   "statement": "Recurring themes in detractor comments: outages during peak hours, slow to get answers on anything technical, and it feels like the product is being built for one big customer now.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-947C305C",
+   "source_id": "customer-voice",
+   "quote": "Promoter themes: the route optimisation saves us real money; the onboarding team is fantastic.",
+   "statement": "Promoter themes: the route optimisation saves us real money; the onboarding team is fantastic.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-AB7D8608",
+   "source_id": "customer-voice",
+   "quote": "Support ticket volume +52% MoM; 38% of tickets tagged reliability. Median first response time 9h (target 2h).",
+   "statement": "Support ticket volume +52% MoM; 38% of tickets tagged reliability. Median first response time 9h (target 2h).",
+   "metric": "ticket_volume",
+   "value": 52.0,
+   "prior": null,
+   "unit": "%",
+   "verified": true,
+   "verify_note": "quote found in source"
+  },
+  {
+   "id": "C-790B384A",
+   "source_id": "customer-voice",
+   "quote": "Four SMB customers on annual plans have asked about early termination in the last three weeks.",
+   "statement": "Four SMB customers on annual plans have asked about early termination in the last three weeks.",
+   "metric": null,
+   "value": null,
+   "prior": null,
+   "unit": null,
+   "verified": true,
+   "verify_note": "quote found in source"
+  }
+ ],
+ "decided_by": {
+  "analyst": "heuristic",
+  "risks": "heuristic",
+  "opportunities": "heuristic",
+  "contrarian": "heuristic",
+  "editor": "heuristic"
+ },
+ "notes": [
+  "report: /home/claude/exec-advisor-v2/out/reports/RUN-A3F76F01.md"
+ ]
+}
