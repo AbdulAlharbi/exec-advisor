@@ -1,0 +1,52 @@
+# The "continuous" in continuous analysis. Runs the advisor on a schedule, commits the new brief
+# into docs/data, and GitHub Pages serves the dashboard from it. No server anywhere.
+name: advisor
+on:
+  schedule:
+    - cron: "0 */6 * * *"      # every six hours
+  workflow_dispatch:
+    inputs:
+      sources:
+        description: "sources manifest"
+        default: "data/company/sources.yaml"
+      brain:
+        description: "auto | claude | heuristic"
+        default: "auto"
+permissions:
+  contents: write
+concurrency:
+  group: advisor-run
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[claude]"
+      - name: Restore the audit chain
+        # out/ is gitignored, so the runner starts empty and AuditLog would begin a fresh
+        # chain from GENESIS. Seed it from the published copy to keep one continuous chain.
+        run: |
+          mkdir -p out
+          [ -f docs/data/audit.jsonl ] && cp docs/data/audit.jsonl out/audit.jsonl || true
+      - name: Run the advisor
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}   # optional; without it the rule brain runs
+          ADVISOR_MODEL: ${{ vars.ADVISOR_MODEL || 'claude-sonnet-5' }}
+        run: |
+          advisor run --brain "${{ github.event.inputs.brain || 'auto' }}" \
+                      --sources "${{ github.event.inputs.sources || 'data/company/sources.yaml' }}" \
+                      --out out --site docs --no-show
+          advisor audit --out out | tail -1
+      - name: Publish the audit trail
+        run: cp out/audit.jsonl docs/data/audit.jsonl
+      - name: Commit the brief
+        run: |
+          git config user.name "advisor-bot"
+          git config user.email "advisor-bot@users.noreply.github.com"
+          git add docs/data
+          git diff --cached --quiet || git commit -m "advisor: $(date -u +%Y-%m-%dT%H:%MZ) brief"
+          git push
