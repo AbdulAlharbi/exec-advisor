@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0e14">
 <title>Executive Advisor — grounded, adversarially reviewed, diffed</title>
 <meta name="description" content="A multi-agent AI advisor that reads a company's business information, verifies every claim against its source, argues with itself, computes what changed since last time, and tells executives what to do — with the evidence attached.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128202;</text></svg>">
@@ -21,8 +22,8 @@
     --radius:10px;--maxw:1140px;
   }
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  html{scroll-behavior:smooth;scroll-padding-top:76px;-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-wrap:break-word;
     background-image:radial-gradient(920px 520px at 80% -10%, rgba(138,180,255,.08), transparent 62%),radial-gradient(720px 440px at 2% 2%, rgba(227,179,65,.05), transparent 60%);background-repeat:no-repeat}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
   a{color:var(--accent);text-decoration:none}
@@ -30,7 +31,7 @@
   code,kbd{font-family:var(--mono);font-size:.875em}
   h1,h2,h3,h4{margin:0;letter-spacing:-.015em;line-height:1.2}
   p{margin:0 0 1em}p:last-child{margin-bottom:0}
-  header.top{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  header.top{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
   .top .wrap{display:flex;align-items:center;gap:24px;height:60px}
   .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em;font-size:15px;color:var(--text)}
   .brand:hover{text-decoration:none}
@@ -86,12 +87,13 @@
   .comp dd.none{color:var(--text-faint);font-style:italic}
   .comp dd.gate{color:#8fe0c2}
   .file{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);margin-top:auto;padding-top:14px}
-  .diagram{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 18px;overflow-x:auto}
+  .diagram{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 18px;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .diagram pre.mermaid{margin:0;text-align:center;min-height:40px}
   .diagram .mermaid-fallback{display:none;font-family:var(--mono);font-size:12.5px;color:var(--text-dim);white-space:pre;text-align:left}
   .diagram.failed .mermaid-fallback{display:block}
   .diagram.failed pre.mermaid{display:none}
   .cap{font-size:13px;color:var(--text-faint);margin-top:12px;text-align:center}
+  .scrollhint{display:none;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--text-faint);margin:0 0 8px}
   .rule{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent-dim);border-radius:8px;padding:16px 18px;font-size:14.5px;color:var(--text-dim)}
   .rule b{color:var(--text)}
   .rule .k{font-family:var(--mono);color:var(--accent);font-size:13px}
@@ -107,7 +109,7 @@
   .stat .v{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--text);line-height:1.1}
   .stat .k{font-size:12.5px;color:var(--text-faint);margin-top:5px}
   .stat .sub{font-size:11.5px;color:var(--text-faint);margin-top:7px;font-family:var(--mono)}
-  .tablewrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+  .tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
   table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
   th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
   th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--text-faint);font-weight:500;background:var(--bg-2);white-space:nowrap}
@@ -124,7 +126,7 @@
   .quote{font-family:var(--serif);font-size:15.5px;line-height:1.5;color:var(--text);border-left:2px solid var(--border-2);padding:2px 0 2px 14px;margin:0 0 10px}
   .quote small{display:block;font-family:var(--mono);font-size:11px;color:var(--text-faint);margin-top:4px;letter-spacing:.02em}
   .verdict-line{font-family:var(--mono);font-size:12.5px;color:var(--opp);margin-top:6px}
-  pre.sh{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.85;margin:0;color:var(--text)}
+  pre.sh{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;overflow-x:auto;-webkit-overflow-scrolling:touch;font-family:var(--mono);font-size:13px;line-height:1.85;margin:0;color:var(--text)}
   pre.sh .c{color:var(--text-faint)}
   pre.sh .p{color:var(--accent);user-select:none}
   pre.sh .f{color:var(--gold)}
@@ -140,6 +142,52 @@
   .closing .hero-cta{justify-content:center}
   footer{border-top:1px solid var(--border);padding:36px 0 52px;color:var(--text-faint);font-size:13.5px}
   footer .wrap{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+
+  /* ---- phones & small tablets ---- */
+  @media(max-width:760px){
+    .wrap{padding:0 18px}
+    section{padding:52px 0}
+    .hero{padding:52px 0 44px}
+    .hero h1{font-size:clamp(31px,8.6vw,48px);margin-bottom:18px}
+    .pitch{font-size:17px;margin-bottom:26px}
+    h2.sec{font-size:26px}
+    .lede{font-size:15.5px}
+    .sec-head{margin-bottom:28px}
+    .hero-cta{gap:10px}
+    .hero-cta .btn.lg{flex:1 1 220px;justify-content:center}
+    .btn.lg{padding:13px 18px}
+    .card{padding:18px}
+    .comp dl{grid-template-columns:1fr;gap:2px 0}
+    .comp dt{padding-top:8px}
+    .diagram{padding:16px 12px}
+    .cap{font-size:12.5px}
+    .rule{padding:14px 15px;font-size:14px}
+    .step{padding:16px;grid-template-columns:32px 1fr;gap:12px}
+    .step::before{font-size:23px}
+    .stat{padding:14px 15px}
+    .stat .v{font-size:21px}
+    .ev{padding:18px 18px}
+    .honest{padding:20px 20px}
+    /* Wrapping beats sideways scrolling for commands you may want to copy on a phone. */
+    pre.sh{font-size:11.5px;padding:15px 16px;line-height:1.75;white-space:pre-wrap;overflow-wrap:break-word}
+    .scrollhint{display:block}
+    .closing{padding:32px 22px;border-radius:12px}
+    .closing h2{font-size:25px}
+    footer{padding:28px 0 40px}
+    footer .wrap{flex-direction:column;gap:8px}
+  }
+  @media(max-width:560px){
+    .nm{display:none}
+    .top .wrap{height:56px;gap:12px}
+    .brand{font-size:14.5px}
+    .btn{padding:8px 13px;font-size:13px}
+  }
+  @media(max-width:400px){
+    .wrap{padding:0 14px}
+    .chips{gap:8px}
+    .chip{padding:7px 12px;font-size:12.5px}
+    pre.sh{font-size:10.8px}
+  }
 </style>
 </head>
 <body>
@@ -159,7 +207,7 @@
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
         GitHub
       </a>
-      <a class="btn primary" href="app.html">Open the live brief &rarr;</a>
+      <a class="btn primary" href="app.html">Open<span class="nm"> the live</span> brief &rarr;</a>
     </div>
   </div>
 </header>
@@ -424,6 +472,7 @@ finding: strip evidence ids that aren't verified claims
       The expansion signed, the at-risk renewal recovered, DSO slipped from 71 to 79 days, a fourth outage landed.
       The change engine reports exactly that &mdash; and reports <em>nothing</em> as new, because nothing new appeared.
     </p>
+    <p class="scrollhint">Swipe the table sideways for every column &rarr;</p>
     <div class="tablewrap" style="margin-bottom:12px">
       <table>
         <thead><tr><th>Change</th><th>Kind</th><th>Finding</th><th>Note</th></tr></thead>
@@ -545,17 +594,25 @@ finding: strip evidence ids that aren't verified claims
 <script type="module">
   const styles = getComputedStyle(document.documentElement);
   const v = n => styles.getPropertyValue(n).trim();
+  // On phones a left-to-right flowchart is a mile of sideways scrolling: stack it and fit the width.
+  const narrow = window.matchMedia('(max-width: 760px)').matches;
+  if (narrow) {
+    // innerHTML, not textContent: the labels carry real <br> elements that textContent would swallow.
+    document.querySelectorAll('pre.mermaid').forEach(n => {
+      n.innerHTML = n.innerHTML.replace(/flowchart\s+LR/, 'flowchart TD');
+    });
+  }
   try {
     const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs');
     mermaid.initialize({
       startOnLoad: false, securityLevel: 'strict', theme: 'base',
       fontFamily: '"JetBrains Mono", ui-monospace, monospace',
-      flowchart: { curve: 'basis', padding: 14, nodeSpacing: 32, rankSpacing: 42, useMaxWidth: false },
+      flowchart: { curve: 'basis', padding: 14, nodeSpacing: narrow ? 22 : 32, rankSpacing: narrow ? 34 : 42, useMaxWidth: narrow },
       themeVariables: {
         background: v('--bg-2'), primaryColor: v('--surface-2'), primaryTextColor: v('--text'),
         primaryBorderColor: v('--border-2'), secondaryColor: v('--surface'), tertiaryColor: v('--bg-2'),
         lineColor: '#43566f', textColor: v('--text-dim'), mainBkg: v('--surface-2'),
-        nodeBorder: v('--border-2'), clusterBkg: v('--bg-2'), edgeLabelBackground: v('--bg-2'), fontSize: '13px'
+        nodeBorder: v('--border-2'), clusterBkg: v('--bg-2'), edgeLabelBackground: v('--bg-2'), fontSize: narrow ? '12px' : '13px'
       }
     });
     await mermaid.run({ querySelector: 'pre.mermaid' });

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
 <title>Executive Advisor</title>
 <meta name="description" content="A multi-agent AI advisor that reads business information, verifies every claim against its source, argues with itself, and tells executives what changed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,19 +12,22 @@
 <style>
   :root{--paper:#F2F4F7;--surface:#fff;--ink:#16213E;--ink-2:#4B5570;--ink-3:#7A8299;--line:#CBD2DE;--line-2:#E3E7EE;--blue:#1F3A93;--blue-soft:#E6EBF8;--risk:#B42318;--risk-soft:#FBEAE7;--opp:#0E7C66;--opp-soft:#E3F3EF;--warn:#B54708;--warn-soft:#FDEFE1;--serif:"Newsreader",Georgia,serif;--sans:"Public Sans",system-ui,sans-serif;--r:4px}
   *{box-sizing:border-box}
-  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-text-size-adjust:100%;overflow-wrap:break-word}
   a{color:var(--blue)}
   :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;border-bottom:1px solid var(--line);background:var(--surface)}
-  .brand{font-family:var(--serif);font-size:22px;font-weight:500}
+  .top{display:flex;align-items:center;gap:16px;padding:14px 24px;border-bottom:1px solid var(--line);background:var(--surface);flex-wrap:wrap}
+  .brand{font-family:var(--serif);font-size:22px;font-weight:500;flex:1 1 auto;min-width:0}
   .brand small{font-family:var(--sans);font-size:12px;color:var(--ink-3);margin-left:10px}
-  .top .meta{font-size:13px;color:var(--ink-2)}
-  .app{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 57px)}
-  .rail{border-right:1px solid var(--line);background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:24px;position:sticky;top:57px;max-height:calc(100vh - 57px);overflow:auto}
+  .top .meta{font-size:13px;color:var(--ink-2);margin-left:auto}
+  .top .about{font-size:13px;flex:none;padding:4px 0}
+  .app{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 57px);min-height:calc(100dvh - 57px)}
+  .rail{border-right:1px solid var(--line);background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:24px;position:sticky;top:57px;max-height:calc(100vh - 57px);max-height:calc(100dvh - 57px);overflow:auto}
   .main{padding:28px 36px 80px;max-width:1080px;width:100%}
-  @media (max-width:900px){.app{grid-template-columns:1fr}.rail{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line)}.main{padding:20px 16px 60px}}
-  .rail h2{font-size:13px;font-weight:600;color:var(--ink-2);margin:0 0 10px}
+  .rsec{margin:0}
+  .rsec>summary{font-size:13px;font-weight:600;color:var(--ink-2);margin:0 0 10px;list-style:none;cursor:default}
+  .rsec>summary::-webkit-details-marker{display:none}
+  @media (min-width:901px){.rsec>summary{pointer-events:none}}
   .hist{display:flex;flex-direction:column;gap:2px}
   .hist button{text-align:left;border:0;background:none;padding:6px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;color:var(--ink-2);display:flex;gap:10px;align-items:baseline;font:inherit;width:100%}
   .hist button:hover{background:var(--paper)}
@@ -31,7 +35,7 @@
   .hist time{flex:none;color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:12px}
   .hist span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .hist .n{flex:none;font-variant-numeric:tabular-nums;font-size:12px;color:var(--ink-3)}
-  .src{font-size:13px;color:var(--ink-2);padding:6px 0;border-top:1px solid var(--line-2)}
+  .src{font-size:13px;color:var(--ink-2);padding:6px 0;border-top:1px solid var(--line-2);overflow-wrap:anywhere}
   .src:last-child{border-bottom:1px solid var(--line-2)}
   .src small{display:block;color:var(--ink-3);font-size:12px}
   .src .err{color:var(--risk)}
@@ -79,7 +83,8 @@
   .opp .tag.high{background:var(--opp-soft);color:var(--opp)}
   .tag.weakened{background:var(--warn-soft);color:var(--warn);border-color:transparent}
   details.ev{margin-top:8px}
-  details.ev summary{cursor:pointer;font-size:13px;color:var(--blue);list-style:none}
+  details.ev summary{cursor:pointer;font-size:13px;color:var(--blue);list-style:none;padding:2px 0}
+  details.ev summary::-webkit-details-marker{display:none}
   details.ev summary::before{content:"";display:inline-block;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);margin:0 8px 2px 2px;transition:transform .15s}
   details.ev[open] summary::before{transform:rotate(45deg)}
   .quote{font-family:var(--serif);font-size:15px;line-height:1.45;margin:8px 0 0 14px;padding-left:12px;border-left:2px solid var(--line);color:var(--ink)}
@@ -109,18 +114,53 @@
   .dropped{font-size:13px;color:var(--ink-3);margin-top:12px}
   .alert{border-left:3px solid var(--risk);background:var(--risk-soft);padding:12px 14px;border-radius:var(--r);font-size:14px;margin-bottom:20px;color:#7A1710}
   .note{border-left:3px solid var(--blue);background:var(--blue-soft);padding:12px 14px;border-radius:var(--r);font-size:14px;margin-bottom:20px}
+
+  /* ---- phones: last in the sheet so these win over the base rules ---- */
+  @media (max-width:900px){
+    .top{padding:11px 16px;gap:10px}
+    .brand{font-size:19px}
+    .brand small{display:none}
+    .top .meta{font-size:11.5px;order:3;width:100%;margin-left:0}
+    .app{grid-template-columns:1fr;min-height:0}
+    /* The rail sits above the brief on a phone, so collapse it to two tappable rows. */
+    .rail{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line);padding:2px 16px 10px;gap:0}
+    .rsec>summary{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0;padding:13px 0;font-size:14px;pointer-events:auto;cursor:pointer;border-bottom:1px solid var(--line-2)}
+    .rsec>summary::after{content:"";flex:none;width:7px;height:7px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(45deg);margin-bottom:3px}
+    .rsec[open]>summary::after{transform:rotate(-135deg);margin-bottom:-3px}
+    .rsec[open]>summary{border-bottom:0}
+    .rsec>*:not(summary){padding-bottom:12px}
+    .hist button{padding:11px 8px;font-size:13.5px}
+    .hint{padding-top:12px}
+    .main{padding:20px 16px 60px}
+    .made{padding:14px 16px;margin:14px 0 28px;grid-template-columns:repeat(2,1fr);gap:12px 16px}
+    .made div b{font-size:23px}
+    .sec{margin-bottom:32px}
+    .grid2{gap:0}
+    details.ev summary{padding:7px 0}
+  }
+  @media (max-width:560px){
+    .verdict{padding:24px 18px;gap:22px}
+    .gauge .n{font-size:46px}
+    .rec{grid-template-columns:34px 1fr;gap:11px}
+    .rec .num{font-size:25px}
+    .change .k{width:72px}
+    .quote{margin-left:0}
+    .obj{margin-left:0}
+    .empty{padding:32px 20px}
+    .empty h1{font-size:27px}
+  }
 </style>
 </head>
 <body>
 <header class="top">
   <div class="brand">Executive Advisor <small>grounded, adversarially reviewed, diffed</small></div>
   <div class="meta" id="topMeta"></div>
-  <a href="index.html" style="font-size:13px;margin-left:16px">About</a>
+  <a class="about" href="index.html">About</a>
 </header>
 <div class="app">
   <aside class="rail">
-    <section><h2>Briefs</h2><div class="hist" id="hist"></div></section>
-    <section><h2>Sources read</h2><div id="srcList"></div></section>
+    <details class="rsec" open><summary>Briefs</summary><div class="hist" id="hist"></div></details>
+    <details class="rsec" open><summary>Sources read</summary><div id="srcList"></div></details>
     <p class="hint">Briefs are produced by the <code>advisor</code> pipeline on a schedule and committed to this site. Nothing runs in the browser.</p>
   </aside>
   <main class="main" id="main"></main>
@@ -218,6 +258,11 @@ function renderBrief(b){
       ${dropped.map(f=>`<div class="dropped">${esc(f.kind)}: ${esc(f.title)} — ${esc((f.objections||[]).slice(-1)[0]||'')}</div>`).join('')}</section>` : ''}`;
   window.scrollTo({top:0});
 }
+const narrow = window.matchMedia('(max-width: 900px)');
+const syncRail = () => document.querySelectorAll('.rsec').forEach(d => { d.open = !narrow.matches; });
+syncRail();
+narrow.addEventListener('change', syncRail);
+
 boot().catch(e => { $('#main').innerHTML = `<div class="alert"><b>Could not load the brief.</b> ${esc(e.message)}</div>`; });
 </script>
 </body>
