@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive Advisor</title>
+<meta name="description" content="A multi-agent AI advisor that reads business information, verifies every claim against its source, argues with itself, and tells executives what changed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#F2F4F7;--surface:#fff;--ink:#16213E;--ink-2:#4B5570;--ink-3:#7A8299;--line:#CBD2DE;--line-2:#E3E7EE;--blue:#1F3A93;--blue-soft:#E6EBF8;--risk:#B42318;--risk-soft:#FBEAE7;--opp:#0E7C66;--opp-soft:#E3F3EF;--warn:#B54708;--warn-soft:#FDEFE1;--serif:"Newsreader",Georgia,serif;--sans:"Public Sans",system-ui,sans-serif;--r:4px}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5}
+  a{color:var(--blue)}
+  :focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;border-bottom:1px solid var(--line);background:var(--surface)}
+  .brand{font-family:var(--serif);font-size:22px;font-weight:500}
+  .brand small{font-family:var(--sans);font-size:12px;color:var(--ink-3);margin-left:10px}
+  .top .meta{font-size:13px;color:var(--ink-2)}
+  .app{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 57px)}
+  .rail{border-right:1px solid var(--line);background:var(--surface);padding:20px;display:flex;flex-direction:column;gap:24px;position:sticky;top:57px;max-height:calc(100vh - 57px);overflow:auto}
+  .main{padding:28px 36px 80px;max-width:1080px;width:100%}
+  @media (max-width:900px){.app{grid-template-columns:1fr}.rail{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--line)}.main{padding:20px 16px 60px}}
+  .rail h2{font-size:13px;font-weight:600;color:var(--ink-2);margin:0 0 10px}
+  .hist{display:flex;flex-direction:column;gap:2px}
+  .hist button{text-align:left;border:0;background:none;padding:6px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;color:var(--ink-2);display:flex;gap:10px;align-items:baseline;font:inherit;width:100%}
+  .hist button:hover{background:var(--paper)}
+  .hist button.on{background:var(--blue-soft);color:var(--ink)}
+  .hist time{flex:none;color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:12px}
+  .hist span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hist .n{flex:none;font-variant-numeric:tabular-nums;font-size:12px;color:var(--ink-3)}
+  .src{font-size:13px;color:var(--ink-2);padding:6px 0;border-top:1px solid var(--line-2)}
+  .src:last-child{border-bottom:1px solid var(--line-2)}
+  .src small{display:block;color:var(--ink-3);font-size:12px}
+  .src .err{color:var(--risk)}
+  .hint{font-size:12px;color:var(--ink-3);line-height:1.45}
+  .hint code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--paper);padding:1px 4px;border-radius:3px}
+  .empty{border:1px dashed var(--line);border-radius:6px;padding:48px 32px;max-width:620px}
+  .empty h1{font-family:var(--serif);font-weight:500;font-size:32px;line-height:1.15;margin:0 0 14px}
+  .empty p{color:var(--ink-2);max-width:52ch}
+  .verdict{background:var(--ink);color:#fff;padding:36px 40px;border-radius:6px;display:grid;grid-template-columns:1fr auto;gap:28px;align-items:end}
+  .verdict .date{font-size:13px;color:#AEB6CC;margin-bottom:14px}
+  .verdict h1{font-family:var(--serif);font-weight:500;font-size:clamp(26px,3.4vw,40px);line-height:1.15;margin:0 0 16px;letter-spacing:-.012em;max-width:28ch}
+  .verdict p{font-family:var(--serif);font-size:18px;line-height:1.5;margin:0;color:#DDE2EF;max-width:62ch}
+  .gauge{min-width:150px}
+  .gauge .n{font-family:var(--serif);font-size:56px;line-height:1;font-weight:500}
+  .gauge .n small{font-size:18px;color:#AEB6CC;margin-left:2px}
+  .gauge .bar{height:6px;background:#334063;border-radius:3px;margin:10px 0 8px;overflow:hidden}
+  .gauge .bar i{display:block;height:100%;background:#fff;border-radius:3px}
+  .gauge .posture{font-size:13px;color:#DDE2EF}
+  .gauge .posture b{color:#fff}
+  @media (max-width:700px){.verdict{grid-template-columns:1fr;padding:26px 22px}}
+  .made{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px 20px;margin:16px 0 34px;padding:16px 20px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+  .made div{font-size:13px;color:var(--ink-2)}
+  .made div b{display:block;font-family:var(--serif);font-size:26px;line-height:1.1;color:var(--ink);font-weight:500}
+  .made .wide{grid-column:1/-1;font-size:12.5px;color:var(--ink-3)}
+  .sec{margin-bottom:40px}
+  .sec h2{font-family:var(--serif);font-weight:500;font-size:24px;margin:0 0 4px}
+  .sec .sub{color:var(--ink-3);font-size:13px;margin:0 0 16px}
+  .sec.risk h2{color:var(--risk)}.sec.opp h2{color:var(--opp)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+  @media (max-width:800px){.grid2{grid-template-columns:1fr}}
+  .item{padding:14px 0;border-top:1px solid var(--line-2)}
+  .item:last-child{border-bottom:1px solid var(--line-2)}
+  .item h3{margin:0 0 6px;font-size:15.5px;font-weight:600;line-height:1.35}
+  .item p{margin:4px 0;color:var(--ink-2);font-size:14px}
+  .item p b{color:var(--ink);font-weight:600}
+  .item.weak h3{color:var(--ink-2)}
+  .sev{display:inline-block;width:38px;height:6px;border-radius:3px;background:var(--line-2);vertical-align:middle;margin-right:8px;position:relative;overflow:hidden}
+  .sev i{position:absolute;inset:0;background:var(--risk)}
+  .sev.critical i{width:100%}.sev.high i{width:75%}.sev.medium i{width:50%}.sev.low i{width:25%}
+  .opp .sev i{background:var(--opp)}
+  .tagline{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .tag{font-size:12px;padding:2px 8px;border-radius:3px;background:var(--paper);color:var(--ink-2);border:1px solid var(--line-2)}
+  .tag.critical{background:var(--risk-soft);color:var(--risk);border-color:transparent}
+  .tag.high{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+  .opp .tag.high{background:var(--opp-soft);color:var(--opp)}
+  .tag.weakened{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+  details.ev{margin-top:8px}
+  details.ev summary{cursor:pointer;font-size:13px;color:var(--blue);list-style:none}
+  details.ev summary::before{content:"";display:inline-block;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);margin:0 8px 2px 2px;transition:transform .15s}
+  details.ev[open] summary::before{transform:rotate(45deg)}
+  .quote{font-family:var(--serif);font-size:15px;line-height:1.45;margin:8px 0 0 14px;padding-left:12px;border-left:2px solid var(--line);color:var(--ink)}
+  .quote small{display:block;font-family:var(--sans);font-size:12px;color:var(--ink-3);margin-top:2px}
+  .obj{margin:6px 0 0 14px;font-size:13px;color:var(--warn)}
+  .obj.ok{color:var(--ink-3)}
+  .assume{padding:14px 0;border-top:1px solid var(--line-2)}
+  .assume:last-child{border-bottom:1px solid var(--line-2)}
+  .assume .q{font-family:var(--serif);font-size:19px;line-height:1.35;margin:0 0 6px;font-style:italic}
+  .assume p{margin:4px 0;font-size:14px;color:var(--ink-2)}
+  .assume p b{color:var(--ink);font-weight:600}
+  .rec{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--line-2)}
+  .rec:last-child{border-bottom:1px solid var(--line-2)}
+  .rec .num{font-family:var(--serif);font-size:30px;line-height:1;color:var(--blue);font-weight:500}
+  .rec h3{margin:0 0 6px;font-size:16px;font-weight:600;line-height:1.35}
+  .rec .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px 18px;margin-top:10px;font-size:13px}
+  .rec .facts div{color:var(--ink-2)}.rec .facts div span{display:block;color:var(--ink-3);font-size:12px}
+  ul.plain{margin:0;padding-left:18px;color:var(--ink-2);font-size:14px}
+  ul.plain li{margin:6px 0}
+  .change{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
+  .change:last-child{border-bottom:1px solid var(--line-2)}
+  .change .k{flex:none;width:80px;font-size:12px;font-weight:600;padding-top:2px}
+  .change .k.new,.change .k.escalated{color:var(--risk)}
+  .change .k.resolved,.change .k.improved{color:var(--opp)}
+  .change .k.unchanged{color:var(--ink-3)}
+  .change .t{color:var(--ink)}
+  .dropped{font-size:13px;color:var(--ink-3);margin-top:12px}
+  .alert{border-left:3px solid var(--risk);background:var(--risk-soft);padding:12px 14px;border-radius:var(--r);font-size:14px;margin-bottom:20px;color:#7A1710}
+  .note{border-left:3px solid var(--blue);background:var(--blue-soft);padding:12px 14px;border-radius:var(--r);font-size:14px;margin-bottom:20px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Executive Advisor <small>grounded, adversarially reviewed, diffed</small></div>
+  <div class="meta" id="topMeta"></div>
+  <a href="index.html" style="font-size:13px;margin-left:16px">About</a>
+</header>
+<div class="app">
+  <aside class="rail">
+    <section><h2>Briefs</h2><div class="hist" id="hist"></div></section>
+    <section><h2>Sources read</h2><div id="srcList"></div></section>
+    <p class="hint">Briefs are produced by the <code>advisor</code> pipeline on a schedule and committed to this site. Nothing runs in the browser.</p>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = iso => new Date(iso).toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+const POSTURE = {confident:'Confident', steady:'Steady', caution:'Proceed with caution', alarm:'Act now'};
+let index = [], current = null;
+
+async function getJSON(p){ const r = await fetch(p, {cache:'no-store'}); if(!r.ok) throw new Error(`${p}: HTTP ${r.status}`); return r.json(); }
+
+async function boot(){
+  try{ index = await getJSON('data/index.json'); }catch(e){ renderEmpty(); return; }
+  if(!index.length){ renderEmpty(); return; }
+  const id = location.hash.slice(1) || index[0].run_id;
+  await load(id);
+}
+async function load(id){
+  try{
+    current = id === index[0].run_id ? await getJSON('data/latest.json') : await getJSON(`data/history/${id}.json`);
+  }catch(e){ current = await getJSON('data/latest.json'); }
+  location.hash = current.run_id;
+  renderHist(); renderSources(); renderBrief(current);
+}
+window.addEventListener('hashchange', () => { const id = location.hash.slice(1); if(id && current && id !== current.run_id) load(id); });
+
+function renderEmpty(){
+  $('#main').innerHTML = `<div class="empty"><h1>No brief yet.</h1><p>Run <code>advisor run</code> locally, or trigger the <b>advisor</b> workflow in GitHub Actions, and the brief will appear here.</p></div>`;
+}
+function renderHist(){
+  $('#hist').innerHTML = index.map(e => `<button class="${e.run_id===current.run_id?'on':''}" data-id="${esc(e.run_id)}"><time>${fmt(e.at)}</time><span>${esc(e.headline)}</span><span class="n">${e.health_score}</span></button>`).join('');
+  $('#hist').onclick = e => { const b = e.target.closest('button'); if(b) load(b.dataset.id); };
+}
+function renderSources(){
+  $('#srcList').innerHTML = (current.sources||[]).map(s => `<div class="src">${esc(s.title)}<small>${esc(s.kind)} · ${s.chars.toLocaleString()} chars${s.fetched_at?' · '+fmt(s.fetched_at):''}${s.error?` · <span class="err">${esc(s.error)}</span>`:''}</small></div>`).join('');
+}
+const claimOf = id => (current.claims||[]).find(c => c.id === id);
+const sourceTitle = id => (current.sources||[]).find(s => s.id === id)?.title || id;
+
+function finding(f, label){
+  const live = f.status !== 'dropped';
+  const quotes = f.evidence.map(claimOf).filter(Boolean).map(c => `<div class="quote">“${esc(c.quote)}”<small>${esc(sourceTitle(c.source_id))} · verified in source</small></div>`).join('');
+  const objs = (f.objections||[]).map(o => `<div class="obj ${/sustain/.test(o)?'ok':''}">${esc(o.replace(/^contrarian /,''))}</div>`).join('');
+  return `<div class="item ${f.status==='weakened'?'weak':''}">
+    <h3><span class="sev ${esc(f.level)}"><i></i></span>${esc(f.title)}</h3>
+    <p>${esc(f.rationale)}</p>
+    <p><b>${f.kind==='risk'?'Reduce it':'First step'}:</b> ${esc(f.action)}</p>
+    <div class="tagline"><span class="tag ${esc(f.level)}">${esc(f.level)}${label?' '+label:''}</span>${f.likelihood?`<span class="tag">${esc(f.likelihood)}</span>`:''}${f.horizon?`<span class="tag">${esc(f.horizon)}</span>`:''}${f.status==='weakened'?'<span class="tag weakened">contested</span>':''}</div>
+    <details class="ev"><summary>${f.evidence.length} verified quote${f.evidence.length===1?'':'s'}${objs?' · contrarian review':''}</summary>${quotes}${objs}</details>
+  </div>`;
+}
+
+function renderBrief(b){
+  const score = Math.max(0, Math.min(100, b.health_score|0));
+  const g = b.grounding || {};
+  const risks = b.risks.filter(f => f.status !== 'dropped'), opps = b.opportunities.filter(f => f.status !== 'dropped');
+  const dropped = [...b.risks, ...b.opportunities].filter(f => f.status === 'dropped');
+  const notable = (b.changes||[]).filter(c => c.type !== 'unchanged' || /lifted|contested/.test(c.note));
+  const unchanged = (b.changes||[]).length - notable.length;
+  $('#topMeta').textContent = `${b.run_id} · ${b.brain}${b.model?' '+b.model:''}`;
+  $('#main').innerHTML = `
+    ${b.run_id !== index[0].run_id ? `<div class="note">Viewing a past brief from ${fmt(b.at)}. <a href="#${index[0].run_id}">Back to the latest</a>.</div>` : ''}
+    <section class="verdict">
+      <div><div class="date">Brief from ${fmt(b.at)} · ${b.sources.filter(s=>s.chars>0).length} sources</div><h1>${esc(b.headline)}</h1><p>${esc(b.summary)}</p></div>
+      <div class="gauge"><div class="n">${score}<small>/100</small></div><div class="bar"><i style="width:${score}%"></i></div><div class="posture">Advisor's posture: <b>${esc(POSTURE[b.posture]||b.posture)}</b></div></div>
+    </section>
+    <div class="made">
+      <div><b>${g.claims_verified??0}</b>claims verified against sources${g.claims_dropped?` · ${g.claims_dropped} dropped`:''}</div>
+      <div><b>${risks.length}</b>risks${g.findings_dropped?` · ${g.findings_dropped} dropped`:''}</div>
+      <div><b>${opps.length}</b>opportunities${g.findings_weakened?` · ${g.findings_weakened} contested`:''}</div>
+      <div><b>${b.assumptions.length}</b>assumptions challenged</div>
+      <div class="wide">Decided by ${Object.entries(b.decided_by||{}).map(([k,v])=>`${k}: ${esc(v)}`).join(' · ')}${b.previous_run_id?` · diffed against ${esc(b.previous_run_id)}`:''}</div>
+    </div>
+    ${b.changes && b.changes.length ? `<section class="sec"><h2>What changed</h2><p class="sub">Computed by matching findings across runs — not the model's opinion of what changed</p>
+      ${notable.map(c=>`<div class="change"><span class="k ${esc(c.type)}">${esc(c.type)}</span><span><span class="t">${esc(c.title)}</span> — ${esc(c.note)}</span></div>`).join('')}
+      ${unchanged?`<div class="change"><span class="k unchanged">unchanged</span><span>${unchanged} other finding${unchanged===1?'':'s'} at the same level</span></div>`:''}</section>` : ''}
+    <div class="grid2">
+      <section class="sec risk"><h2>Risks</h2><p class="sub">What could hurt, how badly, and on what evidence</p>${risks.map(f=>finding(f,'')).join('')}</section>
+      <section class="sec opp"><h2>Opportunities</h2><p class="sub">Upside the evidence supports</p>${opps.map(f=>finding(f,'impact')).join('')}</section>
+    </div>
+    <section class="sec"><h2>Assumptions worth challenging</h2><p class="sub">What leadership is treating as true that the evidence does not settle</p>
+      ${b.assumptions.map(a=>{const c=a.quote_claim?claimOf(a.quote_claim):null; return `<div class="assume"><p class="q">“${esc(a.statement)}”</p>${c?`<div class="quote">“${esc(c.quote)}”<small>${esc(sourceTitle(c.source_id))}</small></div>`:''}<p>${esc(a.why_questionable)}</p><p><b>Test it:</b> ${esc(a.test)}</p></div>`}).join('')}
+    </section>
+    <section class="sec"><h2>Recommendations</h2><p class="sub">In priority order</p>
+      ${b.recommendations.map((r,i)=>`<div class="rec"><div class="num">${i+1}</div><div><h3>${esc(r.action)}</h3><p style="margin:0;color:var(--ink-2);font-size:14px">${esc(r.rationale)}</p><div class="facts"><div><span>Owner</span>${esc(r.owner)}</div><div><span>When</span>${esc(r.timeline)}</div><div><span>Success looks like</span>${esc(r.expected_outcome)}</div></div></div></div>`).join('')}
+    </section>
+    <div class="grid2">
+      <section class="sec"><h2>Ask your team this week</h2><ul class="plain">${b.questions.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></section>
+      <section class="sec"><h2>What the advisor cannot see</h2><ul class="plain">${b.gaps.map(q=>`<li>${esc(q)}</li>`).join('')}</ul></section>
+    </div>
+    ${(dropped.length || (g.dropped_examples||[]).length) ? `<section class="sec"><h2>Left on the cutting-room floor</h2><p class="sub">Claims whose quote could not be found in the named source, and findings that lost their evidence or their argument</p>
+      ${(g.dropped_examples||[]).map(d=>`<div class="dropped">Claim: ${esc(d)}</div>`).join('')}
+      ${dropped.map(f=>`<div class="dropped">${esc(f.kind)}: ${esc(f.title)} — ${esc((f.objections||[]).slice(-1)[0]||'')}</div>`).join('')}</section>` : ''}`;
+  window.scrollTo({top:0});
+}
+boot().catch(e => { $('#main').innerHTML = `<div class="alert"><b>Could not load the brief.</b> ${esc(e.message)}</div>`; });
+</script>
+</body>
+</html>
