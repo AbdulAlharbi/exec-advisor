@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Environments
+.venv/
+.env
+
+# Run artefacts. The durable, published copies live in docs/data (served by Pages).
+out/
+
+# macOS
+.DS_Store
