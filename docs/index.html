@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive Advisor — grounded, adversarially reviewed, diffed</title>
+<meta name="description" content="A multi-agent AI advisor that reads a company's business information, verifies every claim against its source, argues with itself, computes what changed since last time, and tells executives what to do — with the evidence attached.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>&#128202;</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0e14;--bg-2:#0f131c;--surface:#141926;--surface-2:#1a2130;
+    --border:#232c3d;--border-2:#313d52;--text:#e5e9f0;--text-dim:#9aa7bd;--text-faint:#66748c;
+    --accent:#8ab4ff;--accent-dim:#3f5f9c;--gold:#e3b341;
+    --risk:#f0836f;--opp:#54d0a4;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --serif:"Newsreader",Georgia,"Times New Roman",serif;
+    --radius:10px;--maxw:1140px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(920px 520px at 80% -10%, rgba(138,180,255,.08), transparent 62%),radial-gradient(720px 440px at 2% 2%, rgba(227,179,65,.05), transparent 60%);background-repeat:no-repeat}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code,kbd{font-family:var(--mono);font-size:.875em}
+  h1,h2,h3,h4{margin:0;letter-spacing:-.015em;line-height:1.2}
+  p{margin:0 0 1em}p:last-child{margin-bottom:0}
+  header.top{position:sticky;top:0;z-index:50;background:rgba(11,14,20,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+  .top .wrap{display:flex;align-items:center;gap:24px;height:60px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em;font-size:15px;color:var(--text)}
+  .brand:hover{text-decoration:none}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--opp);box-shadow:0 0 0 3px rgba(84,208,164,.16);flex:none}
+  nav.top-nav{display:flex;gap:22px;margin-left:auto;font-size:13.5px}
+  nav.top-nav a{color:var(--text-dim);font-weight:500}
+  nav.top-nav a:hover{color:var(--accent);text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 15px;border-radius:8px;font-size:13.5px;font-weight:600;border:1px solid var(--border-2);color:var(--text);background:var(--surface);white-space:nowrap}
+  .btn:hover{border-color:var(--accent-dim);color:var(--accent);text-decoration:none}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#0a0e17}
+  .btn.primary:hover{background:#a6c6ff;color:#0a0e17}
+  .btn svg{width:15px;height:15px;fill:currentColor;flex:none}
+  .header-cta{margin-left:22px;display:flex;gap:10px;align-items:center}
+  @media(max-width:900px){nav.top-nav{display:none}.header-cta{margin-left:auto}}
+  @media(max-width:520px){.header-cta .btn.ghost{display:none}}
+  section{padding:76px 0;border-top:1px solid var(--border)}
+  section:first-of-type{border-top:none}
+  .eyebrow{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h2.sec{font-family:var(--serif);font-size:34px;font-weight:500;margin-bottom:14px;letter-spacing:-.01em}
+  .lede{color:var(--text-dim);font-size:16.5px;max-width:76ch}
+  .sec-head{margin-bottom:38px}
+  .hero{padding:88px 0 66px;border-top:none}
+  .hero h1{font-family:var(--serif);font-size:clamp(40px,6.4vw,68px);font-weight:500;letter-spacing:-.02em;margin-bottom:22px;line-height:1.05}
+  .hero h1 .em{font-style:italic;color:var(--gold)}
+  .pitch{font-size:19px;color:var(--text-dim);max-width:72ch;margin-bottom:30px}
+  .pitch strong{color:var(--text);font-weight:600}
+  .hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:34px}
+  .btn.lg{padding:12px 22px;font-size:15px;border-radius:9px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px}
+  .chip{display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:8px 15px;font-size:13px;color:var(--text-dim)}
+  .chip b{color:var(--text);font-family:var(--mono);font-weight:700;font-size:13px}
+  .chip .pip{width:6px;height:6px;border-radius:50%;background:var(--accent);flex:none}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:960px){.g3{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:680px){.g3,.g2{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px}
+  .card h3{font-size:16.5px;font-weight:650;margin-bottom:8px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .card p{font-size:14.5px;color:var(--text-dim)}
+  .comp{position:relative;display:flex;flex-direction:column}
+  .comp.orchestrator{grid-column:1/-1;background:linear-gradient(180deg,var(--surface-2),var(--surface))}
+  .comp.critic{border-color:rgba(227,179,65,.38);background:linear-gradient(180deg,rgba(227,179,65,.05),var(--surface))}
+  .comp .role{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--text-faint);margin-bottom:9px}
+  .badge{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:5px;white-space:nowrap}
+  .badge.read{background:rgba(138,180,255,.11);color:var(--accent);border:1px solid rgba(138,180,255,.26)}
+  .badge.gate{background:rgba(84,208,164,.12);color:var(--opp);border:1px solid rgba(84,208,164,.3)}
+  .badge.crit{background:rgba(227,179,65,.14);color:var(--gold);border:1px solid rgba(227,179,65,.4)}
+  .badge.orch{background:rgba(148,163,184,.12);color:#b8c6d6;border:1px solid rgba(148,163,184,.28)}
+  .comp dl{margin:14px 0 0;display:grid;grid-template-columns:auto 1fr;gap:7px 12px;font-size:13.5px}
+  .comp dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);padding-top:3px;white-space:nowrap}
+  .comp dd{margin:0;color:var(--text-dim)}
+  .comp dd.none{color:var(--text-faint);font-style:italic}
+  .comp dd.gate{color:#8fe0c2}
+  .file{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);margin-top:auto;padding-top:14px}
+  .diagram{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:24px 18px;overflow-x:auto}
+  .diagram pre.mermaid{margin:0;text-align:center;min-height:40px}
+  .diagram .mermaid-fallback{display:none;font-family:var(--mono);font-size:12.5px;color:var(--text-dim);white-space:pre;text-align:left}
+  .diagram.failed .mermaid-fallback{display:block}
+  .diagram.failed pre.mermaid{display:none}
+  .cap{font-size:13px;color:var(--text-faint);margin-top:12px;text-align:center}
+  .rule{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent-dim);border-radius:8px;padding:16px 18px;font-size:14.5px;color:var(--text-dim)}
+  .rule b{color:var(--text)}
+  .rule .k{font-family:var(--mono);color:var(--accent);font-size:13px}
+  .steps{counter-reset:step;display:grid;gap:14px}
+  .step{display:grid;grid-template-columns:44px 1fr;gap:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
+  .step::before{counter-increment:step;content:counter(step);font-family:var(--serif);font-size:26px;color:var(--accent);line-height:1;font-weight:500}
+  .step h4{font-size:15.5px;margin-bottom:5px}
+  .step p{font-size:14px;color:var(--text-dim);margin:0}
+  .step code{color:var(--gold)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px}
+  @media(max-width:860px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px}
+  .stat .v{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--text);line-height:1.1}
+  .stat .k{font-size:12.5px;color:var(--text-faint);margin-top:5px}
+  .stat .sub{font-size:11.5px;color:var(--text-faint);margin-top:7px;font-family:var(--mono)}
+  .tablewrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:640px}
+  th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--border);vertical-align:top}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--text-faint);font-weight:500;background:var(--bg-2);white-space:nowrap}
+  tbody tr:last-child td{border-bottom:none}
+  td.mono,th.mono{font-family:var(--mono);font-size:12.5px}
+  .pill{font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap}
+  .pill.esc{background:rgba(240,131,111,.14);color:var(--risk)}
+  .pill.res{background:rgba(84,208,164,.14);color:var(--opp)}
+  .pill.unc{background:rgba(148,163,184,.12);color:#b8c6d6}
+  .ev{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px}
+  .ev .title{font-size:16px;font-weight:650;margin-bottom:4px}
+  .ev .sub{font-family:var(--mono);font-size:11.5px;color:var(--text-faint);margin-bottom:14px}
+  .ev .why{font-size:14.5px;color:var(--text-dim);margin-bottom:16px}
+  .quote{font-family:var(--serif);font-size:15.5px;line-height:1.5;color:var(--text);border-left:2px solid var(--border-2);padding:2px 0 2px 14px;margin:0 0 10px}
+  .quote small{display:block;font-family:var(--mono);font-size:11px;color:var(--text-faint);margin-top:4px;letter-spacing:.02em}
+  .verdict-line{font-family:var(--mono);font-size:12.5px;color:var(--opp);margin-top:6px}
+  pre.sh{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.85;margin:0;color:var(--text)}
+  pre.sh .c{color:var(--text-faint)}
+  pre.sh .p{color:var(--accent);user-select:none}
+  pre.sh .f{color:var(--gold)}
+  .honest{background:var(--bg-2);border:1px solid var(--border-2);border-radius:var(--radius);padding:24px 26px}
+  .honest h3{font-size:16px;font-weight:650;margin-bottom:6px}
+  .honest ul{margin:14px 0 0;padding-left:20px;font-size:14px;color:var(--text-dim)}
+  .honest li{margin-bottom:9px}.honest li:last-child{margin-bottom:0}
+  .honest b{color:var(--text);font-weight:600}
+  .note{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(227,179,65,.11);color:var(--gold);border:1px solid rgba(227,179,65,.25);vertical-align:middle}
+  .closing{background:linear-gradient(180deg,var(--surface-2),var(--surface));border:1px solid var(--border-2);border-radius:16px;padding:44px 40px;text-align:center}
+  .closing h2{font-family:var(--serif);font-size:30px;font-weight:500;margin-bottom:12px}
+  .closing p{color:var(--text-dim);max-width:60ch;margin:0 auto 24px}
+  .closing .hero-cta{justify-content:center}
+  footer{border-top:1px solid var(--border);padding:36px 0 52px;color:var(--text-faint);font-size:13.5px}
+  footer .wrap{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot"></span>Executive&nbsp;Advisor</a>
+    <nav class="top-nav">
+      <a href="#problem">Problem</a>
+      <a href="#pipeline">Pipeline</a>
+      <a href="#grounding">Grounding</a>
+      <a href="#demo">Demo</a>
+      <a href="#run">Run it</a>
+    </nav>
+    <div class="header-cta">
+      <a class="btn ghost" href="https://github.com/AbdulAlharbi/exec-advisor" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+      <a class="btn primary" href="app.html">Open the live brief &rarr;</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="eyebrow">Multi-agent AI executive advisory</div>
+    <h1>Every sentence,<br><span class="em">traceable</span> to something true.</h1>
+    <p class="pitch">
+      An AI advisor that reads a company's business information &mdash; financials, pipeline, incidents, board memos,
+      customer feedback, live spreadsheets &mdash; and produces an executive brief: risks, opportunities, the assumptions
+      leadership is treating as fact, ranked recommendations, and what changed since last time. Five specialist agents,
+      a <strong>grounding gate</strong> that verifies every quote against its source in code, a <strong>Contrarian</strong>
+      that may only attack, and change detection that is <strong>computed, not narrated</strong>.
+    </p>
+    <div class="hero-cta">
+      <a class="btn primary lg" href="app.html">Open the live brief &rarr;</a>
+      <a class="btn lg" href="#pipeline">See how it works</a>
+    </div>
+    <div class="chips">
+      <span class="chip"><span class="pip"></span>Chief of Staff + <b>5</b> specialist agents</span>
+      <span class="chip"><span class="pip"></span><b>42</b> tests passing</span>
+      <span class="chip"><span class="pip"></span>grounding gate &middot; <b>0</b> unverified claims shipped</span>
+      <span class="chip"><span class="pip"></span><b>2</b> interchangeable brains</span>
+      <span class="chip"><span class="pip"></span>runs offline &middot; Claude optional</span>
+    </div>
+  </div>
+</section>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The problem</div>
+      <h2 class="sec">Not &ldquo;can a model write recommendations?&rdquo; &mdash; &ldquo;can you trust the sentence it wrote?&rdquo;</h2>
+      <p class="lede">
+        A chief of staff reads the board pack and tells the CEO where the risk is. An LLM can write that brief fluently &mdash;
+        and the failure mode is silent: a confident paragraph with an invented number in it is worse than no brief at all.
+        So the hard problem in AI advisory is not fluency. It is making every claim traceable, forcing the analysis to
+        argue against itself, and reporting change by <em>comparison</em> rather than by asking the model what it
+        remembers. That is enforced here in code the prompt cannot reach &mdash; not requested in a system prompt.
+      </p>
+    </div>
+    <div class="grid g3">
+      <article class="card"><h3>&#128279; Grounded</h3><p>Every claim carries a verbatim quote. A program checks the quote is actually present in the named source before anything downstream may cite it. A hallucinated figure becomes a dropped claim in the audit log, never a line in the brief.</p></article>
+      <article class="card"><h3>&#9878;&#65039; Adversarial</h3><p>A separate Contrarian agent reviews every finding and may only <em>subtract</em> &mdash; sustain, weaken, or drop &mdash; then surfaces the assumptions leadership is treating as fact, quoting their own words back with the cheapest test to settle each one.</p></article>
+      <article class="card"><h3>&#128200; Diffed</h3><p>What changed since last time is computed by matching findings across runs and comparing severity &mdash; new, escalated, improved, resolved. The model is shown the diff; it is never asked to remember what moved.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The pipeline</div>
+      <h2 class="sec">Six phases, two gates, one orchestrator</h2>
+      <p class="lede">
+        A <code>ChiefOfStaff</code> sequences the agents and checkpoints the brief after every phase. It never calls a
+        brain and never bypasses a gate &mdash; the agents apply the grounding checks; the orchestrator only records what
+        survived. Claims that fail verification and findings that lose their evidence are dropped and logged, not shipped.
+      </p>
+    </div>
+    <div class="diagram" data-diagram>
+<pre class="mermaid">
+flowchart LR
+    S["Sources<br/>files - URLs - inline<br/>re-fetched every run"] --> A["Analyst"]
+    A --> G1{"verify_claims<br/>quote in source?"}
+    G1 -->|dropped| X1["audit:<br/>quote not found"]
+    G1 -->|verified| M["metrics + signals"]
+    M --> R["Risk agent"]
+    M --> O["Opportunity agent"]
+    R --> G2{"verify_findings<br/>evidence verified?"}
+    O --> G2
+    G2 -->|no evidence| X2["dropped"]
+    G2 -->|kept| C["Contrarian<br/>sustain - weaken - drop"]
+    C --> D["diff<br/>vs previous run"]
+    D --> E["Editor<br/>headline - score - recs"]
+    E --> P["report.md - run.json<br/>docs/data to Pages"]
+</pre>
+      <div class="mermaid-fallback">sources -> Analyst -> [verify_claims] -> metrics+signals -> Risk / Opportunity agents
+        -> [verify_findings] -> Contrarian (sustain/weaken/drop) -> diff vs previous
+        -> Editor (headline, score, recommendations) -> report + published JSON
+
+  gate 1  verify_claims    quote must appear verbatim in the named source, or the claim is dropped
+  gate 2  verify_findings  every evidence id must be a verified claim, or the finding is dropped</div>
+      <p class="cap">The two diamonds are the grounding gates. Both are plain Python, called by the agents &mdash; unreachable from any prompt.</p>
+    </div>
+  </div>
+</section>
+
+<section id="components">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Components</div>
+      <h2 class="sec">One orchestrator, five specialists &mdash; one of them only allowed to attack</h2>
+      <p class="lede">
+        Each agent asks a <code>Brain</code> for a typed, validated object and gets grounding applied before its output
+        moves on. Splitting proposer from critic across separate agents is what makes &ldquo;challenge assumptions&rdquo; a step in
+        the pipeline rather than a sentence in a prompt.
+      </p>
+    </div>
+    <div class="grid g3">
+      <article class="card comp orchestrator">
+        <div class="role">Orchestrator</div>
+        <h3>Chief of Staff <span class="badge orch">no brain calls</span></h3>
+        <p>Owns the phase sequence &mdash; ingest &rarr; analyst &rarr; risks / opportunities &rarr; contrarian &rarr; diff &rarr; editor &rarr; report &mdash; and checkpoints the brief after each. Computes the diff against the previous run, writes the report, publishes the site data. If every source fails to load it terminates cleanly rather than analysing nothing.</p>
+        <dl>
+          <dt>Reads</dt><dd>the source manifest, the previous run</dd>
+          <dt>Writes</dt><dd class="none">nothing to a brain &mdash; delegates every decision</dd>
+          <dt>Records</dt><dd>which brain decided each phase, what survived each gate</dd>
+        </dl>
+        <div class="file">src/advisor/chief_of_staff.py</div>
+      </article>
+      <article class="card comp">
+        <div class="role">Specialist agent</div>
+        <h3>Analyst <span class="badge gate">grounding gate</span></h3>
+        <p>Lifts atomic claims from the sources, each with a verbatim quote. <code>verify_claims</code> checks every quote against its source; only verified claims proceed, and metrics and signals are extracted from those alone.</p>
+        <dl>
+          <dt>Reads</dt><dd>full source texts</dd>
+          <dt>Returns</dt><dd><code>ClaimSpec[]</code> &mdash; quote, source id, statement, optional metric/value/prior</dd>
+          <dt>Gate</dt><dd class="gate">paraphrase, altered number, wrong source &rarr; dropped &amp; logged</dd>
+        </dl>
+        <div class="file">src/advisor/agents/analyst.py</div>
+      </article>
+      <article class="card comp">
+        <div class="role">Specialist agent &times;2</div>
+        <h3>Risk &amp; Opportunity <span class="badge gate">grounding gate</span></h3>
+        <p>Two agents, same shape: turn verified claims, metrics and signals into findings that must cite claim ids. <code>verify_findings</code> strips any evidence id that is not a verified claim and drops a finding left with none.</p>
+        <dl>
+          <dt>Reads</dt><dd>verified claims, metrics, signals</dd>
+          <dt>Returns</dt><dd><code>FindingSpec[]</code> &mdash; level, likelihood, horizon, evidence ids, action</dd>
+          <dt>Gate</dt><dd class="gate">unevidenced findings cannot reach the executive</dd>
+        </dl>
+        <div class="file">src/advisor/agents/findings.py</div>
+      </article>
+      <article class="card comp critic">
+        <div class="role">Specialist agent</div>
+        <h3>Contrarian <span class="badge crit">may only attack</span></h3>
+        <p>The devil's advocate, in its own call. It cannot add findings &mdash; it returns one verdict per finding (sustain / weaken / drop), applied structurally, and the assumptions leadership treats as fact, each quoting their own words with a cheap test to settle it.</p>
+        <dl>
+          <dt>Reads</dt><dd>findings, claims, metrics, signals</dd>
+          <dt>Returns</dt><dd>verdicts + <code>AssumptionSpec[]</code></dd>
+          <dt>Effect</dt><dd class="gate">drop removes &middot; weaken contests &amp; excludes from the score</dd>
+        </dl>
+        <div class="file">src/advisor/agents/contrarian.py</div>
+      </article>
+      <article class="card comp">
+        <div class="role">Specialist agent</div>
+        <h3>Editor <span class="badge read">reads survivors</span></h3>
+        <p>Writes the brief from what survived: headline, summary, posture, a health score consistent with the risk levels, and recommendations that each require an owner, a timeline and a measurable outcome. Links to dropped findings are pruned.</p>
+        <dl>
+          <dt>Reads</dt><dd>surviving findings, assumptions, the computed changes</dd>
+          <dt>Returns</dt><dd>headline &middot; score &middot; recommendations &middot; questions &middot; gaps</dd>
+          <dt>Shown</dt><dd>the diff &mdash; never asked to compute it</dd>
+        </dl>
+        <div class="file">src/advisor/agents/editor.py</div>
+      </article>
+      <article class="card comp">
+        <div class="role">Shared machinery</div>
+        <h3>Two brains + audit <span class="badge read">one interface</span></h3>
+        <p><code>ClaudeBrain</code> and <code>HeuristicBrain</code> implement one <code>decide(task, context, schema)</code>. Auto-select Claude when a key is present, the rule brain otherwise &mdash; the floor the model must beat and the CI back-end. Every decision, gate result and phase is a hash-chained audit line.</p>
+        <dl>
+          <dt>Claude</dt><dd>Messages API, schema-validated, one repair round, then heuristic fallback</dd>
+          <dt>Heuristic</dt><dd>explicit rules over the same signals &mdash; deterministic, no key</dd>
+          <dt>Audit</dt><dd class="gate">SHA-256 chain; a rewritten line fails verification</dd>
+        </dl>
+        <div class="file">src/advisor/llm/ &middot; src/advisor/audit.py</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="grounding">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The centerpiece</div>
+      <h2 class="sec">The grounding gate</h2>
+      <p class="lede">
+        Sixty lines of <code>grounding.py</code>, no LLM in it. Matching normalises whitespace, case and typographic
+        quotes and dashes &mdash; so a model that copies correctly is never punished for a curly apostrophe &mdash; but a paraphrase,
+        an altered digit, or a quote attributed to the wrong source fails. There is deliberately no &ldquo;fuzzy&rdquo; mode:
+        false negatives are cheap, false positives are the whole failure mode.
+      </p>
+    </div>
+    <div class="grid g2" style="margin-bottom:16px">
+      <div class="rule"><b>Claims must quote.</b> The Analyst returns a verbatim <span class="k">quote</span> and a <span class="k">source_id</span> per claim. <span class="k">verify_claims()</span> confirms the normalised quote is a substring of that source. Quotes under 12 characters are rejected as too thin to be evidence.</div>
+      <div class="rule"><b>Findings must cite verified claims.</b> <span class="k">verify_findings()</span> strips any evidence id that is not a verified claim; a finding left with none is dropped, with the reason recorded. A half-grounded finding keeps only its real evidence.</div>
+      <div class="rule" style="border-left-color:var(--gold)"><b>Metrics come from verified claims only.</b> Burn, runway, concentration, DSO, NPS and the rest are extracted after the gate &mdash; so every number in a recommendation traces back to a quote that exists.</div>
+      <div class="rule" style="border-left-color:var(--opp)"><b>The prompt can't reach it.</b> The gate is called by the agents, in Python, after each brain decision. No instruction, jailbreak or clever phrasing routes around a substring check.</div>
+    </div>
+    <div class="diagram" data-diagram>
+<pre class="mermaid">
+flowchart TD
+    Q["claim: quote + source_id"] --> N["normalise<br/>whitespace - case - quotes - dashes"]
+    N --> L{"quote >= 12 chars?"}
+    L -->|no| DROP["dropped - logged"]
+    L -->|yes| SS{"source_id known?"}
+    SS -->|no| DROP
+    SS -->|yes| SUB{"quote is substring<br/>of source text?"}
+    SUB -->|no| DROP
+    SUB -->|yes| OK["verified - may be cited"]
+    OK --> F{"finding evidence<br/>all verified?"}
+    F -->|strips unknown ids| F
+    F -->|none left| FDROP["finding dropped"]
+    F -->|one or more verified| KEEP["finding kept"]
+</pre>
+      <div class="mermaid-fallback">claim(quote, source_id)
+  -> normalise (whitespace, case, curly quotes, dashes)
+  -> quote >= 12 chars?        no -> dropped
+  -> source_id known?          no -> dropped
+  -> quote is substring of source text?   no -> dropped
+  -> yes -> verified, may be cited
+finding: strip evidence ids that aren't verified claims
+  -> none left -> finding dropped ; one or more verified -> finding kept</div>
+      <p class="cap">Proven against an adversarial brain in the test suite: it invents a quote, mis-attributes a real one and cites a fake id &mdash; all three are removed, the half-grounded finding survives on its real evidence alone.</p>
+    </div>
+    <p style="margin-top:26px;font-family:var(--mono);font-size:12.5px;color:var(--text-faint)">
+      grounding.py:46 verify_claims &middot; :66 verify_findings &nbsp;&middot;&nbsp;
+      tests/test_grounding.py (7) &middot; tests/test_pipeline.py:87 test_grounding_gate_stops_a_hallucinating_brain
+    </p>
+  </div>
+</section>
+
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The demo company</div>
+      <h2 class="sec">A board pack built to contain the tensions a real one hides</h2>
+      <p class="lede">
+        Meridian Freight Systems &mdash; a fictional Series B logistics SaaS &mdash; in two snapshots two weeks apart. Five sources:
+        the Q2 close, a CRO pipeline note, an incident log, a CEO memo to the board, and a customer-feedback digest.
+        Revenue is up 18% while margin, burn, DSO, deferred revenue and NPS all worsen; a top customer at 34% of ARR
+        holds a termination right the third outage just triggered; a $3.6M expansion is forecast as Commit on a verbal
+        yes; and the CEO memo calls it the best quarter ever.
+      </p>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="v">5</div><div class="k">sources</div><div class="sub">files &middot; URLs &middot; inline</div></div>
+      <div class="stat"><div class="v">13</div><div class="k">risks (week 1)</div><div class="sub">3 critical &middot; 7 high</div></div>
+      <div class="stat"><div class="v">8</div><div class="k">assumptions challenged</div><div class="sub">runway, under control, ...</div></div>
+      <div class="stat"><div class="v">11<span style="color:var(--risk)">/100</span></div><div class="k">health &middot; alarm</div><div class="sub">0 claims dropped this run</div></div>
+    </div>
+    <h3 style="font-size:17px;margin-bottom:6px">What the advisor concluded &mdash; with the evidence attached</h3>
+    <p class="lede" style="font-size:15px;margin-bottom:16px">One risk and one assumption from the week-1 brief. In the app, every finding opens to show the verified quotes it rests on and the Contrarian's verdict.</p>
+    <div class="grid g2" style="margin-bottom:34px">
+      <div class="ev">
+        <div class="title">Cash runway is roughly 8 months at current burn</div>
+        <div class="sub">critical &middot; likelihood likely &middot; horizon next 6-9 months</div>
+        <div class="why">Cash $14.6M against burn $1.9M per month gives about 7.7 months &mdash; under the 12-month floor most boards require before a raise.</div>
+        <p class="quote">&ldquo;Net burn: $1.9M/month (Q1: $1.3M). Cash on hand: $14.6M. Board deck says runway is &lsquo;comfortably above 12 months&rsquo;.&rdquo;<small>Q2 financial summary &middot; verified in source</small></p>
+        <div class="verdict-line">&#9878; contrarian (sustain): evidence is consistent across sources</div>
+      </div>
+      <div class="ev">
+        <div class="title" style="font-family:var(--serif);font-style:italic;font-weight:500">&ldquo;Runway is comfortably above 12 months&rdquo;</div>
+        <div class="sub">assumption &mdash; leadership's own words</div>
+        <p class="quote">&ldquo;...Board deck says runway is &lsquo;comfortably above 12 months&rsquo;.&rdquo;<small>CEO memo to board</small></p>
+        <div class="why" style="margin-bottom:6px">On the numbers in the same document, $14.6M of cash at $1.9M per month is about 7.7 months &mdash; not &ldquo;comfortably above 12&rdquo;.</div>
+        <div class="verdict-line" style="color:var(--gold)">test it &rarr; rebuild the cash forecast on current burn with unsigned expansion excluded</div>
+      </div>
+    </div>
+    <h3 style="font-size:17px;margin-bottom:6px">Two weeks later &mdash; the diff, computed not narrated</h3>
+    <p class="lede" style="font-size:15px;margin-bottom:16px">
+      The expansion signed, the at-risk renewal recovered, DSO slipped from 71 to 79 days, a fourth outage landed.
+      The change engine reports exactly that &mdash; and reports <em>nothing</em> as new, because nothing new appeared.
+    </p>
+    <div class="tablewrap" style="margin-bottom:12px">
+      <table>
+        <thead><tr><th>Change</th><th>Kind</th><th>Finding</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill esc">escalated</span></td><td class="mono">risk</td><td>Collections slowing: DSO 79 days from 48</td><td class="mono">medium &rarr; high</td></tr>
+          <tr><td><span class="pill res">resolved</span></td><td class="mono">risk</td><td>Key renewal forecast on a relationship that no longer exists</td><td class="mono">no longer present (was high)</td></tr>
+          <tr><td><span class="pill unc">unchanged</span></td><td class="mono">opp</td><td>A large expansion is on the table</td><td class="mono">still high; objection lifted</td></tr>
+          <tr><td><span class="pill unc">unchanged</span></td><td class="mono">risk</td><td>Top customer is 36% of ARR</td><td class="mono">still critical</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap" style="text-align:left">Real output from two <code>advisor run</code> passes on the rule brain, diffed by <code>diff.py</code>. The &ldquo;objection lifted&rdquo; note appears because the expansion, once a verbal yes the Contrarian had weakened, is now signed.</p>
+    <div style="margin-top:34px;text-align:center">
+      <a class="btn primary lg" href="app.html">Open the full brief in the dashboard &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<section id="verified">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Verified &amp; not verified</div>
+      <h2 class="sec">What is proven, and what is only implemented</h2>
+    </div>
+    <div class="grid g2">
+      <div class="honest">
+        <h3 style="color:var(--opp)">Exercised offline, every run</h3>
+        <p style="font-size:14px;color:var(--text-dim);margin-top:6px">42 tests &mdash; 7 grounding, 10 signals, 6 diff, 2 audit, 4 heuristic, 6 Claude-contract, 7 end-to-end &mdash; plus both demo snapshots, on Python 3.11 and 3.12 in CI. No test makes a network call.</p>
+        <ul>
+          <li><b>The grounding gate stops a hallucinating brain</b> &mdash; a test brain invents a quote, mis-attributes a real one and cites a fake id; all three are removed and the half-grounded finding survives on its real evidence.</li>
+          <li><b>Every evidence id resolves to a real quote</b> &mdash; a test re-reads the sources and checks each finding's evidence independently of the gate.</li>
+          <li><b>Change is computed, not narrated</b> &mdash; the week-2 run asserts DSO escalated, the renewal resolved, the objection lifted, and nothing was invented as new.</li>
+          <li><b>The audit chain detects tampering</b> &mdash; a rewritten payload flips verification to false at that entry.</li>
+        </ul>
+      </div>
+      <div class="honest">
+        <h3 style="color:var(--gold)">Implemented, not proven <span class="note">known gaps</span></h3>
+        <p style="font-size:14px;color:var(--text-dim);margin-top:6px">Stated here at the same confidence as in the repository's own <em>Known gaps</em> section.</p>
+        <ul>
+          <li><b>Grounding is substring-exact.</b> A model that paraphrases a number correctly is dropped along with one that invents it &mdash; the intended trade, but a model that struggles to copy verbatim produces thin briefs.</li>
+          <li><b>Claude findings are matched by title similarity.</b> Two Claude runs may word a risk differently enough to fall under the threshold, producing a spurious resolved + new pair.</li>
+          <li><b>The Claude path is contract-tested, not live-tested.</b> A stubbed client covers extraction, the repair round and the fallback; a live run needs a key and isn't in CI.</li>
+          <li><b>The health score is linear, not calibrated;</b> the demo company is fictional and hand-written to contain the contradictions the system is meant to find.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="run">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Run it</div>
+      <h2 class="sec">Two ways in</h2>
+      <p class="lede">
+        The dashboard reads briefs the pipeline already committed &mdash; no key, no setup, just open it. To generate
+        your own, clone the repo and run the CLI; with no API key the deterministic rule brain runs the whole thing,
+        which is why CI and the demo need no network.
+      </p>
+    </div>
+    <div class="grid g2" style="align-items:start">
+      <div>
+        <div class="steps">
+          <div class="step"><div><h4>Just look</h4><p>The live brief is served straight from committed JSON. <a href="app.html">Open the dashboard &rarr;</a></p></div></div>
+          <div class="step"><div><h4>Point it at your company</h4><p>Edit a <code>sources.yaml</code> manifest &mdash; your files, published sheets, and a context paragraph.</p></div></div>
+          <div class="step"><div><h4>Let it run itself</h4><p>A GitHub Actions cron re-runs the pipeline, commits the new brief, and Pages redeploys. Continuous, no server.</p></div></div>
+        </div>
+      </div>
+      <pre class="sh"><span class="c"># install</span>
+<span class="p">$</span> git clone https://github.com/AbdulAlharbi/exec-advisor
+<span class="p">$</span> cd exec-advisor
+<span class="p">$</span> pip install -e <span class="f">".[dev]"</span>
+
+<span class="c"># analyse the demo company (no key needed)</span>
+<span class="p">$</span> advisor run --brain heuristic
+
+<span class="c"># two weeks later - diffed against the last run</span>
+<span class="p">$</span> advisor run --brain heuristic \
+      --sources data/company-week2/sources.yaml
+
+<span class="c"># inspect, list history, verify the audit chain</span>
+<span class="p">$</span> advisor show
+<span class="p">$</span> advisor audit
+
+<span class="c"># 42 tests, no network, ~1s</span>
+<span class="p">$</span> pytest -q
+
+<span class="c"># then open the dashboard</span>
+<span class="p">$</span> open docs/app.html   <span class="c"># or serve docs/ over http</span></pre>
+    </div>
+    <p class="cap" style="text-align:left;margin-top:16px">
+      With <code>ANTHROPIC_API_KEY</code> set, the default <code>ADVISOR_BRAIN=auto</code> selects Claude; without it,
+      the rule brain. The source manifest is the whole configuration &mdash; point <code>ADVISOR_SOURCES</code> at your own
+      company and the same guarantees apply.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="closing">
+      <h2>See a brief that can prove every word</h2>
+      <p>The demo company is loaded and waiting &mdash; verdict, computed change table, every finding with its verified quotes, the assumptions quoted back to leadership, and the recommendations.</p>
+      <div class="hero-cta">
+        <a class="btn primary lg" href="app.html">Open the live brief &rarr;</a>
+        <a class="btn lg" href="https://github.com/AbdulAlharbi/exec-advisor" target="_blank" rel="noopener">Read the source</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Executive Advisor &mdash; MIT licensed. Demo company is fictional; analysis is grounded, adversarially reviewed and diffed.</div>
+    <div><a href="https://github.com/AbdulAlharbi/exec-advisor">github.com/AbdulAlharbi/exec-advisor</a></div>
+  </div>
+</footer>
+
+<script type="module">
+  const styles = getComputedStyle(document.documentElement);
+  const v = n => styles.getPropertyValue(n).trim();
+  try {
+    const { default: mermaid } = await import('https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs');
+    mermaid.initialize({
+      startOnLoad: false, securityLevel: 'strict', theme: 'base',
+      fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+      flowchart: { curve: 'basis', padding: 14, nodeSpacing: 32, rankSpacing: 42, useMaxWidth: false },
+      themeVariables: {
+        background: v('--bg-2'), primaryColor: v('--surface-2'), primaryTextColor: v('--text'),
+        primaryBorderColor: v('--border-2'), secondaryColor: v('--surface'), tertiaryColor: v('--bg-2'),
+        lineColor: '#43566f', textColor: v('--text-dim'), mainBkg: v('--surface-2'),
+        nodeBorder: v('--border-2'), clusterBkg: v('--bg-2'), edgeLabelBackground: v('--bg-2'), fontSize: '13px'
+      }
+    });
+    await mermaid.run({ querySelector: 'pre.mermaid' });
+  } catch (err) {
+    console.error('Mermaid failed to render, showing text fallback:', err);
+    document.querySelectorAll('[data-diagram]').forEach(d => d.classList.add('failed'));
+  }
+</script>
+</body>
+</html>
