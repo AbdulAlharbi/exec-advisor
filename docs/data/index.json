@@ -1,5 +1,15 @@
 [
  {
+  "run_id": "RUN-3DBD04A3",
+  "at": "2026-09-07T11:37:07.086779Z",
+  "headline": "Cash runway is roughly 8 months at current burn. 3 critical and 7 high risks are live; 3 opportunities.",
+  "health_score": 11,
+  "posture": "alarm",
+  "brain": "heuristic",
+  "risks": 13,
+  "opportunities": 3
+ },
+ {
   "run_id": "RUN-70642B17",
   "at": "2026-09-07T02:56:56.282406Z",
   "headline": "Cash runway is roughly 8 months at current burn. 3 critical and 7 high risks are live; 3 opportunities.",
